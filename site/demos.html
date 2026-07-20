@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Playground — AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="Run Python code in your browser with Pyodide. Interactive AI Systems Engineering demos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    /* ── Playground Layout ─────────────────── */
+    .playground-page { padding-top: 64px; }
+    .playground-hero {
+      padding: 80px 24px 48px;
+      text-align: center;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .playground-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .playground-hero p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Pyodide Loader ────────────────────── */
+    .pyodide-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      gap: 24px;
+    }
+    .pyodide-loader.hidden { display: none; }
+    .loader-snake {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+    .loader-snake svg {
+      width: 100%;
+      height: 100%;
+    }
+    .snake-body {
+      fill: none;
+      stroke: url(#snakeGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: snake-draw 2s ease-in-out infinite;
+    }
+    @keyframes snake-draw {
+      0% { stroke-dashoffset: 200; }
+      50% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -200; }
+    }
+    .snake-eye {
+      animation: snake-blink 2.5s ease-in-out infinite;
+    }
+    @keyframes snake-blink {
+      0%, 90%, 100% { opacity: 1; }
+      95% { opacity: 0; }
+    }
+    .loader-text {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+    .loader-dots::after {
+      content: '';
+      animation: loader-dots 1.5s steps(4, end) infinite;
+    }
+    @keyframes loader-dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+      100% { content: ''; }
+    }
+
+    /* ── Playground Grid ───────────────────── */
+    .playground-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: calc(100vh - 300px);
+    }
+    .examples-sidebar {
+      background: var(--bg-soft);
+      border-right: 1px solid var(--ink-faint);
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .examples-sidebar h3 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-mute);
+      margin-bottom: 16px;
+    }
+    .example-group {
+      margin-bottom: 24px;
+    }
+    .example-group-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .example-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--ink-faint);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-bottom: 6px;
+    }
+    .example-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--ink);
+      transform: translateX(4px);
+    }
+    .example-btn.active {
+      border-color: var(--accent-blue);
+      background: rgba(79,125,255,0.08);
+      color: var(--accent-blue);
+    }
+
+    .editor-panel {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--ink-faint);
+      background: var(--bg-soft);
+    }
+    .toolbar-title {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-mute);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .toolbar-btn.run {
+      background: var(--gradient-emerald);
+      color: white;
+    }
+    .toolbar-btn.run:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(46,204,113,0.35);
+    }
+    .toolbar-btn.reset {
+      background: var(--bg-elevated);
+      color: var(--ink-soft);
+      border: 1px solid var(--ink-faint);
+    }
+    .toolbar-btn.reset:hover {
+      border-color: var(--accent-coral);
+      color: var(--accent-coral);
+    }
+    .toolbar-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .code-textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 300px;
+      padding: 20px 24px;
+      background: var(--bg-code);
+      border: none;
+      outline: none;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink);
+      resize: vertical;
+      tab-size: 4;
+    }
+    .code-textarea::placeholder {
+      color: var(--ink-mute);
+    }
+
+    .output-panel {
+      border-top: 1px solid var(--ink-faint);
+      background: var(--bg-soft);
+      min-height: 180px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--ink-faint);
+      background: var(--bg-elevated);
+    }
+    .output-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-mute);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .output-status {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .output-status.ready {
+      background: rgba(46,204,113,0.12);
+      color: var(--accent-emerald);
+    }
+    .output-status.running {
+      background: rgba(243,156,18,0.12);
+      color: var(--accent-amber);
+    }
+    .output-status.error {
+      background: rgba(255,107,107,0.12);
+      color: var(--accent-coral);
+    }
+    .output-body {
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .output-body.stdout { color: var(--ink-soft); }
+    .output-body.stderr { color: var(--accent-coral); }
+    .output-body .output-prompt {
+      color: var(--accent-emerald);
+      margin-right: 8px;
+    }
+    .output-placeholder {
+      color: var(--ink-mute);
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .playground-grid { grid-template-columns: 1fr; }
+      .examples-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--ink-faint);
+        max-height: 240px;
+      }
+      .example-group { display: flex; flex-wrap: wrap; gap: 6px; }
+      .example-group-label { width: 100%; }
+      .example-btn { width: auto; margin-bottom: 0; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="index.html#demos">Demos</a>
+        <a href="index.html#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="particles" id="particles" aria-hidden="true"></div>
+  <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+
+  <main id="main" class="playground-page">
+
+    <section class="playground-hero reveal">
+      <h1>🐍 Python Playground</h1>
+      <p>Run real Python code in your browser powered by <a href="https://pyodide.org/" target="_blank" rel="noopener" style="color:var(--accent-blue);text-decoration:none;border-bottom:1px solid var(--accent-blue);">Pyodide</a>. Experiment with AI concepts without installing anything.</p>
+    </section>
+
+    <div class="pyodide-loader" id="pyodideLoader">
+      <div class="loader-snake">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4f7dff"/>
+              <stop offset="50%" style="stop-color:#9b59b6"/>
+              <stop offset="100%" style="stop-color:#2ecc71"/>
+            </linearGradient>
+          </defs>
+          <path class="snake-body" d="M 20 70 Q 20 20 50 20 Q 80 20 80 50 Q 80 80 50 80 Q 30 80 30 60 Q 30 40 50 40 Q 60 40 60 50" />
+          <circle class="snake-eye" cx="54" cy="48" r="2" fill="#1a1a2e"/>
+          <circle class="snake-eye" cx="60" cy="48" r="2" fill="#1a1a2e"/>
+        </svg>
+      </div>
+      <div class="loader-text">Loading Python runtime<span class="loader-dots"></span></div>
+      <div class="loader-text" style="font-size:0.78rem;color:var(--ink-mute);">This may take 10–20 seconds on first load</div>
+    </div>
+
+    <div class="playground-grid" id="playgroundGrid" style="display:none;">
+      <aside class="examples-sidebar">
+        <h3>Examples</h3>
+
+        <div class="example-group">
+          <div class="example-group-label">📊 Phase 0–3: Foundations</div>
+          <button class="example-btn" data-example="hello">👋 Hello World</button>
+          <button class="example-btn" data-example="numpy">🔢 NumPy Arrays</button>
+          <button class="example-btn" data-example="stats">📈 Descriptive Stats</button>
+          <button class="example-btn" data-example="linear">📉 Linear Regression</button>
+        </div>
+
+        <div class="example-group">
+          <div class="example-group-label">🧠 Phase 4–6: Deep Learning & NLP</div>
+          <button class="example-btn" data-example="nn">🧬 Neural Net Forward Pass</button>
+          <button class="example-btn" data-example="tokenize">🔤 Text Tokenization</button>
+          <button class="example-btn" data-example="attention">🎯 Attention Mechanism</button>
+        </div>
+
+        <div class="example-group">
+          <div class="example-group-label">💼 Business</div>
+          <button class="example-btn" data-example="roi">💰 ROI Calculator</button>
+          <button class="example-btn" data-example="churn">🚪 Customer Churn Model</button>
+          <button class="example-btn" data-example="fraud">🛡️ Fraud Detection</button>
+        </div>
+      </aside>
+
+      <div class="editor-panel">
+        <div class="editor-toolbar">
+          <div class="toolbar-title">
+            <span>📝</span>
+            <span id="currentFilename">script.py</span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="toolbar-btn reset" id="resetBtn">↺ Reset</button>
+            <button class="toolbar-btn run" id="runBtn">▶ Run</button>
+          </div>
+        </div>
+        <textarea class="code-textarea" id="codeEditor" placeholder="# Type your Python code here..." spellcheck="false" autocorrect="off" autocapitalize="off"># Welcome to the Python Playground!
+# Click an example on the left, or write your own code.
+
+print("Hello, AI engineer!")
+</textarea>
+
+        <div class="output-panel">
+          <div class="output-header">
+            <span class="output-label">
+              <span>▸</span>
+              <span>Output</span>
+            </span>
+            <span class="output-status ready" id="outputStatus">Ready</span>
+          </div>
+          <div class="output-body stdout" id="outputBody">
+            <span class="output-placeholder">Click Run to see output here...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="index.html#demos">Demos</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span id="toastMessage">Message</span>
+  </div>
+
+  <div class="cmd-palette" id="cmdPalette">
+    <div class="cmd-backdrop" data-cmd-palette></div>
+    <div class="cmd-panel">
+      <div class="cmd-search-row">
+        <span class="cmd-search-icon" aria-hidden="true">🔍</span>
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Search phases, lessons, glossary..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul class="cmd-results" id="cmdResults"></ul>
+      <div class="cmd-footer">
+        <span class="cmd-hint"><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+        <span class="cmd-hint"><kbd>↵</kbd> Select</span>
+        <span class="cmd-hint"><kbd>ESC</kbd> Close</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="AI Systems Engineering in Business — a comprehensive, open-source curriculum bridging AI engineering fundamentals with real-world business applications.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="#curriculum">Curriculum</a>
+        <a href="#demos">Demos</a>
+        <a href="#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="#about">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="particles" id="particles" aria-hidden="true"></div>
+  <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-blob blob-1" aria-hidden="true"></div>
+      <div class="hero-blob blob-2" aria-hidden="true"></div>
+      <div class="hero-blob blob-3" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-badge reveal">
+          <span class="badge-pulse" aria-hidden="true"></span>
+          <span>Open Source Curriculum</span>
+        </div>
+        <h1 class="hero-title reveal">
+          <span class="title-line">AI Systems</span>
+          <span class="title-line title-gradient">Engineering</span>
+          <span class="title-line">in Business</span>
+        </h1>
+        <p class="hero-subtitle reveal">Bridge the gap between AI engineering fundamentals and real-world business applications. Learn by building, not just reading.</p>
+        <div class="hero-cta reveal">
+          <a href="#curriculum" class="btn btn-primary btn-large">Explore Curriculum →</a>
+          <a href="demos.html" class="btn btn-secondary btn-large">Try Playground 🐍</a>
+        </div>
+        <div class="hero-stats reveal">
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="20">0</span>
+            <span class="hero-stat-label">Phases</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="100">0</span>
+            <span class="hero-stat-label">+ Lessons</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="5">0</span>
+            <span class="hero-stat-label">Quizzes</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" data-count="0">0</span>
+            <span class="hero-stat-label">Setup Time</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll reveal" aria-hidden="true">
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+      </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="value-props" id="value-props">
+      <div class="props-grid">
+        <div class="prop-card reveal" style="--card-color:var(--accent-blue)">
+          <div class="prop-icon" aria-hidden="true">📊</div>
+          <h3>Business Context First</h3>
+          <p>Every algorithm taught through a business lens — ROI, customer impact, and strategic value.</p>
+        </div>
+        <div class="prop-card reveal" style="--card-color:var(--accent-coral)">
+          <div class="prop-icon" aria-hidden="true">🔧</div>
+          <h3>Build From Scratch</h3>
+          <p>Implement core algorithms by hand before touching frameworks. Real understanding, not API calls.</p>
+        </div>
+        <div class="prop-card reveal" style="--card-color:var(--accent-emerald)">
+          <div class="prop-icon" aria-hidden="true">🧪</div>
+          <h3>Interactive Demos</h3>
+          <p>Run Python code in your browser with Pyodide. Experiment without installing anything.</p>
+        </div>
+        <div class="prop-card reveal" style="--card-color:var(--accent-violet)">
+          <div class="prop-icon" aria-hidden="true">🎯</div>
+          <h3>Production Ready</h3>
+          <p>MLOps, deployment, monitoring — everything you need to ship AI systems to production.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Demos -->
+    <section class="demo-section" id="demos">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Interactive Demos</span>
+        <h2 class="section-title">See It in Action</h2>
+        <p class="section-desc">Run live code examples that demonstrate core AI concepts with business applications.</p>
+      </div>
+      <div class="demo-grid">
+        <!-- Existing demos -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-blue)">
+          <div class="demo-header">
+            <span class="demo-tag">ML</span>
+            <span class="demo-title">Linear Regression</span>
+          </div>
+          <div class="demo-code"><pre><code>import numpy as np
+
+# Generate sample data
+X = np.array([1,2,3,4,5])
+y = np.array([2.1,4.0,6.2,7.8,10.5])
+
+# Fit model
+m, b = np.polyfit(X, y, 1)
+print(f"Slope: {m:.2f}, Intercept: {b:.2f}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="linear-reg">▶ Run Example</button>
+            <span class="demo-result" id="demo-linear-reg"></span>
+          </div>
+        </div>
+
+        <div class="demo-card reveal" style="--card-color:var(--accent-pink)">
+          <div class="demo-header">
+            <span class="demo-tag">NLP</span>
+            <span class="demo-title">Sentiment Analysis</span>
+          </div>
+          <div class="demo-code"><pre><code>def predict_sentiment(text):
+    positive = ['great','love','excellent']
+    negative = ['bad','terrible','hate']
+    words = text.lower().split()
+    score = sum(1 for w in words if w in positive)
+    score -= sum(1 for w in words if w in negative)
+    return 'positive' if score > 0 else 'negative'
+
+print(predict_sentiment("I love this product!"))</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="sentiment">▶ Run Example</button>
+            <span class="demo-result" id="demo-sentiment"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Decision Tree -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-emerald)">
+          <div class="demo-header">
+            <span class="demo-tag">ML</span>
+            <span class="demo-title">Decision Tree Visualization</span>
+          </div>
+          <div class="demo-code"><pre><code>def gini_impurity(labels):
+    if len(labels) == 0: return 0
+    p = sum(labels) / len(labels)
+    return 2 * p * (1 - p)
+
+def info_gain(left, right, parent):
+    n = len(left) + len(right)
+    return gini_impurity(parent) - (
+        len(left)/n * gini_impurity(left) +
+        len(right)/n * gini_impurity(right)
+    )
+
+# Example: churn prediction
+parent = [1,1,0,0,1,0,1,0]  # 1=churn
+left  = [1,1,1,1]           # high risk
+right = [0,0,0,0]           # low risk
+print(f"Info Gain: {info_gain(left, right, parent):.3f}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="decision-tree">▶ Run Example</button>
+            <span class="demo-result" id="demo-decision-tree"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Neural Network Forward Pass -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-amber)">
+          <div class="demo-header">
+            <span class="demo-tag">DL</span>
+            <span class="demo-title">Neural Network Forward Pass</span>
+          </div>
+          <div class="demo-code"><pre><code>import numpy as np
+
+def relu(x): return np.maximum(0, x)
+
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / e.sum()
+
+# Network: 2 inputs → 3 hidden → 2 outputs
+W1 = np.array([[0.2, -0.5], [0.3, 0.8], [-0.1, 0.4]])
+b1 = np.array([0.1, -0.2, 0.05])
+W2 = np.array([[0.5, -0.3, 0.2], [-0.4, 0.6, -0.1]])
+b2 = np.array([0.05, -0.05])
+
+x = np.array([1.0, 0.5])
+h = relu(W1 @ x + b1)
+out = softmax(W2 @ h + b2)
+print(f"Output probabilities: {out}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="nn-forward">▶ Run Example</button>
+            <span class="demo-result" id="demo-nn-forward"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Text Tokenization -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-indigo)">
+          <div class="demo-header">
+            <span class="demo-tag">NLP</span>
+            <span class="demo-title">Text Tokenization Demo</span>
+          </div>
+          <div class="demo-code"><pre><code>text = "AI transforms business operations!"
+
+# Word tokenization
+words = text.lower().replace("!","").split()
+print(f"Words: {words}")
+
+# Character tokenization
+chars = list(text)
+print(f"Chars: {chars}")
+
+# Subword (naive BPE-style)
+vocab = {"ai", "trans", "form", "s", "busin", "ess", "oper", "ation", "!"}
+tokens = []
+i = 0
+while i < len(text):
+    for j in range(len(text), i, -1):
+        sub = text[i:j].lower()
+        if sub in vocab:
+            tokens.append(sub)
+            i = j
+            break
+    else:
+        tokens.append(text[i])
+        i += 1
+print(f"Subwords: {tokens}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="tokenization">▶ Run Example</button>
+            <span class="demo-result" id="demo-tokenization"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Business ROI Calculator -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-teal)">
+          <div class="demo-header">
+            <span class="demo-tag">Business</span>
+            <span class="demo-title">Business ROI Calculator</span>
+          </div>
+          <div class="demo-code"><pre><code>def calculate_ai_roi(cost, revenue_lift,
+                     efficiency_savings, months):
+    total_benefit = revenue_lift + efficiency_savings
+    roi = ((total_benefit - cost) / cost) * 100
+    payback = cost / (total_benefit / months)
+    return roi, payback
+
+# Example: Customer churn model
+cost = 150_000          # dev + deployment
+revenue_lift = 420_000  # retained customers
+efficiency = 80_000     # automated workflows
+months = 12
+
+roi, payback = calculate_ai_roi(cost, revenue_lift,
+                                 efficiency, months)
+print(f"ROI: {roi:.1f}%")
+print(f"Payback: {payback:.1f} months")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="roi-calc">▶ Run Example</button>
+            <span class="demo-result" id="demo-roi-calc"></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:40px;" class="reveal">
+        <a href="demos.html" class="btn btn-primary btn-large">Open Full Playground →</a>
+      </div>
+    </section>
+
+    <!-- Curriculum -->
+    <section class="curriculum" id="curriculum">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">20-Phase Curriculum</span>
+        <h2 class="section-title">Your Learning Path</h2>
+        <p class="section-desc">From Python basics to production AI systems. Click any phase to explore lessons.</p>
+      </div>
+
+      <div class="progress-overview reveal">
+        <div class="progress-card">
+          <div class="progress-ring-wrapper">
+            <svg class="progress-ring" viewBox="0 0 120 120">
+              <circle class="progress-ring-bg" cx="60" cy="60" r="52"/>
+              <circle class="progress-ring-fill" id="progressRingFill" cx="60" cy="60" r="52"/>
+            </svg>
+            <div class="progress-ring-text">
+              <span class="progress-ring-num" id="progressPercent">0%</span>
+              <span class="progress-ring-label">Complete</span>
+            </div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-item">
+              <span class="progress-dot complete"></span>
+              <span class="progress-label">Lessons Completed</span>
+              <span class="progress-value" id="lessonsCompleted">0 / 0</span>
+            </div>
+            <div class="progress-item">
+              <span class="progress-dot inprogress"></span>
+              <span class="progress-label">Phases Complete</span>
+              <span class="progress-value" id="phasesCompleted">0 / 0</span>
+            </div>
+            <div class="progress-item">
+              <span class="progress-dot quiz"></span>
+              <span class="progress-label">Quiz Score</span>
+              <span class="progress-value" id="quizzesPassed">0 / 5</span>
+            </div>
+            <div class="progress-item">
+              <span class="progress-dot badge"></span>
+              <span class="progress-label">Badges Earned</span>
+              <span class="progress-value" id="badgesEarned">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-grid" id="phaseGrid"></div>
+
+      <div class="phase-legend reveal">
+        <div class="legend-item"><span class="legend-dot complete"></span> Complete</div>
+        <div class="legend-item"><span class="legend-dot in-progress"></span> In Progress</div>
+        <div class="legend-item"><span class="legend-dot planned"></span> Planned</div>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="quiz-section" id="quiz">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Test Your Knowledge</span>
+        <h2 class="section-title">Quick Quiz</h2>
+        <p class="section-desc">See how much you've learned. Get 80%+ to earn a badge!</p>
+      </div>
+      <div class="quiz-card reveal">
+        <div class="quiz-progress">
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+          <span class="quiz-progress-text" id="quizProgressText">Question 1 of 5</span>
+        </div>
+        <div id="quizContent"></div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about-section" id="about">
+      <div class="about-grid">
+        <div class="about-content reveal">
+          <span class="section-eyebrow">About This Project</span>
+          <h2 class="section-title">Learning AI Through Business Problems</h2>
+          <p>Most AI courses teach algorithms in isolation. This curriculum bridges the gap — every concept is grounded in real business value, from customer churn prediction to automated report generation.</p>
+          <p>Built on the foundation of <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">AI Engineering from Scratch</a>, adapted for business contexts with a playful, colorful design.</p>
+          <div class="about-actions">
+            <div class="clone-box">
+              <code>git clone https://github.com/SalihTutun/ai-systems-engineering-in-business.git</code>
+              <button class="copy-btn" id="copyCloneBtn" aria-label="Copy clone command">📋</button>
+            </div>
+            <button class="btn btn-outline btn-small" id="resetProgress">🔄 Reset Progress</button>
+          </div>
+        </div>
+        <div class="about-visual-card reveal">
+          <div class="visual-header">
+            <span class="visual-dot red"></span>
+            <span class="visual-dot yellow"></span>
+            <span class="visual-dot green"></span>
+            <span class="visual-title">terminal</span>
+          </div>
+          <div class="visual-body">
+            <div class="terminal-line"><span class="term-prompt">$</span><span class="term-cmd">python train.py</span></div>
+            <div class="terminal-line"><span class="term-output">Epoch 1/10 — loss: 0.823</span></div>
+            <div class="terminal-line"><span class="term-output">Epoch 10/10 — loss: 0.034 ✓</span></div>
+            <div class="terminal-line"><span class="term-output">Model saved to ./models/churn-v1.pkl</span></div>
+            <div class="terminal-line"><span class="term-prompt">$</span><span class="term-cmd">python deploy.py</span><span class="term-cursor" aria-hidden="true"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="demos.html">Playground</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span id="toastMessage">Message</span>
+  </div>
+
+  <!-- Command Palette -->
+  <div class="cmd-palette" id="cmdPalette">
+    <div class="cmd-backdrop" data-cmd-palette></div>
+    <div class="cmd-panel">
+      <div class="cmd-search-row">
+        <span class="cmd-search-icon" aria-hidden="true">🔍</span>
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Search phases, lessons, glossary..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul class="cmd-results" id="cmdResults"></ul>
+      <div class="cmd-footer">
+        <span class="cmd-hint"><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+        <span class="cmd-hint"><kbd>↵</kbd> Select</span>
+        <span class="cmd-hint"><kbd>ESC</kbd> Close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase Modal -->
+  <div class="modal-overlay" id="phaseModalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Close modal">×</button>
+      <div class="modal-header">
+        <span class="modal-phase-badge" id="modalPhaseBadge">Phase</span>
+        <h2 class="modal-title" id="modalTitle">Phase Title</h2>
+        <p class="modal-desc" id="modalDesc">Description</p>
+        <div class="modal-progress-bar" id="modalProgressBar"><div class="modal-progress-fill" id="modalProgressFill"></div></div>
+      </div>
+      <div class="modal-lessons" id="modalLessons"></div>
+      <div class="modal-footer">
+        <p class="modal-footer-note">Click + to mark lessons complete</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

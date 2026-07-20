@@ -276,7 +276,7 @@
       html += `
         <div class="modal-lesson">
           <span class="modal-lesson-status ${status}"></span>
-          <a href="#" onclick="return false">${l.name}</a>
+          <a href="lesson.html?phase=${idx}&lesson=${i}">${l.name}</a>
           <span class="modal-lesson-type" data-type="${l.type}">${l.type}</span>
           <span class="modal-lesson-lang">${l.lang}</span>
           <button type="button" class="modal-lesson-toggle ${userDone ? 'done' : ''}" data-phase="${p.id}" data-lesson="${i}" title="${userDone ? 'Mark incomplete' : 'Mark complete'}">
@@ -353,10 +353,10 @@
 
     // Build searchable items
     const items = [];
-    PHASES.forEach(phase => {
-      items.push({ type: 'phase', name: phase.name, phase: phase.id, desc: phase.desc });
-      phase.lessons.forEach(lesson => {
-        items.push({ type: 'lesson', name: lesson.name, phase: phase.id, desc: lesson.summary || '', lang: lesson.lang, typeLabel: lesson.type });
+    PHASES.forEach((phase, phaseIdx) => {
+      items.push({ type: 'phase', name: phase.name, phase: phase.id, phaseIdx, desc: phase.desc });
+      phase.lessons.forEach((lesson, lessonIdx) => {
+        items.push({ type: 'lesson', name: lesson.name, phase: phase.id, phaseIdx, lessonIdx, desc: lesson.summary || '', lang: lesson.lang, typeLabel: lesson.type });
       });
     });
     GLOSSARY.forEach(term => {
@@ -399,7 +399,7 @@
 
     function highlightMatch(text, query) {
       const regex = new RegExp('(' + escapeRegExp(query) + ')', 'gi');
-      return text.replace(regex, '<mark style="background:var(--blueprint-tint-strong);color:var(--accent-blue);padding:0 2px;border-radius:2px;">$1</mark>');
+      return text.replace(regex, '<mark style="background:rgba(79,125,255,0.15);color:var(--accent-blue);padding:0 2px;border-radius:2px;">$1</mark>');
     }
 
     // Event listeners
@@ -443,8 +443,21 @@
       const item = e.target.closest('.cmd-item');
       if (!item) return;
       const idx = parseInt(item.getAttribute('data-index'), 10);
-      // For now, scroll to curriculum section
-      document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
+      // Find the item data
+      const q = input.value.toLowerCase().trim();
+      const filtered = items.filter(item =>
+        item.name.toLowerCase().includes(q) ||
+        (item.desc && item.desc.toLowerCase().includes(q))
+      ).slice(0, 10);
+      const selected = filtered[idx];
+      if (!selected) return;
+      if (selected.type === 'lesson') {
+        window.location.href = `lesson.html?phase=${selected.phaseIdx}&lesson=${selected.lessonIdx}`;
+      } else if (selected.type === 'phase') {
+        document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
+      }
       closePalette();
     });
   }
@@ -571,6 +584,14 @@
   }
 
   // ── Demo Run Buttons ────────────────────
+  const DEMO_RESULTS = {
+    'linear-reg': '✓ Model trained! MSE: 0.023 | R²: 0.94 | Training time: 0.3s',
+    'sentiment': '✓ Predictions: ["positive", "negative"] | Confidence: [0.94, 0.89]',
+    'decision-tree': '✓ Info Gain: 0.500 | Best split: tenure > 12 months | Gini parent: 0.500',
+    'nn-forward': '✓ Output probabilities: [0.712, 0.288] | Predicted class: 0',
+    'tokenization': '✓ Words: ["ai","transforms","business","operations"] | Chars: 32 | Subwords: 5',
+    'roi-calc': '✓ ROI: 233.3% | Payback: 3.6 months | Total benefit: $500,000'
+  };
   function initDemoButtons() {
     document.querySelectorAll('.demo-run-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -585,11 +606,7 @@
           btn.disabled = false;
           btn.textContent = '▶ Run Example';
           result.classList.add('show');
-          if (demo === 'linear-reg') {
-            result.textContent = '✓ Model trained! MSE: 0.023 | R²: 0.94 | Training time: 0.3s';
-          } else if (demo === 'sentiment') {
-            result.textContent = '✓ Predictions: ["positive", "negative"] | Confidence: [0.94, 0.89]';
-          }
+          result.textContent = DEMO_RESULTS[demo] || '✓ Demo completed successfully!';
         }, 1500);
       });
     });
@@ -681,6 +698,423 @@
     }, { passive: true });
   }
 
+  // ── Pyodide Playground ──────────────────
+  let pyodideInstance = null;
+  let pyodideLoading = false;
+
+  const PYODIDE_EXAMPLES = {
+    hello: {
+      filename: 'hello.py',
+      code: `# Hello World in Python
+name = "AI Engineer"
+print(f"Hello, {name}!")
+print("Ready to build amazing systems.")`
+    },
+    numpy: {
+      filename: 'numpy_demo.py',
+      code: `import numpy as np
+
+# Create arrays
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+
+print("Array a:", a)
+print("Array b:", b)
+print("a + b  =", a + b)
+print("a * 2  =", a * 2)
+print("Mean   =", np.mean(a))
+print("Std    =", np.std(a))`
+    },
+    stats: {
+      filename: 'stats.py',
+      code: `import numpy as np
+
+# Business data: monthly sales ($K)
+sales = np.array([45, 52, 48, 61, 55, 67, 72, 58, 63, 70, 75, 80])
+
+print("Sales Data Analysis")
+print("-" * 30)
+print(f"Mean:        ${np.mean(sales):.1f}K")
+print(f"Median:      ${np.median(sales):.1f}K")
+print(f"Std Dev:     ${np.std(sales):.1f}K")
+print(f"Min:         ${np.min(sales):.1f}K")
+print(f"Max:         ${np.max(sales):.1f}K")
+print(f"Q1:          ${np.percentile(sales, 25):.1f}K")
+print(f"Q3:          ${np.percentile(sales, 75):.1f}K")
+
+# Growth rate
+monthly_growth = np.diff(sales) / sales[:-1] * 100
+print(f"\nAvg monthly growth: {np.mean(monthly_growth):.1f}%")`
+    },
+    linear: {
+      filename: 'linear_reg.py',
+      code: `import numpy as np
+
+# Generate sample data: marketing spend vs sales
+X = np.array([10, 15, 20, 25, 30, 35, 40, 45, 50, 55])  # $K spend
+y = np.array([45, 55, 60, 70, 78, 85, 92, 100, 110, 115])  # $K sales
+
+# Fit linear regression (y = mx + b)
+m, b = np.polyfit(X, y, 1)
+
+# Predictions
+predictions = m * X + b
+mse = np.mean((y - predictions) ** 2)
+ss_res = np.sum((y - predictions) ** 2)
+ss_tot = np.sum((y - np.mean(y)) ** 2)
+r2 = 1 - (ss_res / ss_tot)
+
+print("Linear Regression Results")
+print("-" * 30)
+print(f"Slope (m):     {m:.3f}")
+print(f"Intercept (b): {b:.3f}")
+print(f"Equation:      Sales = {m:.2f} * Spend + {b:.2f}")
+print(f"MSE:           {mse:.2f}")
+print(f"R²:            {r2:.4f}")
+print(f"\nPrediction for $60K spend: ${m*60 + b:.1f}K")`
+    },
+    nn: {
+      filename: 'nn_forward.py',
+      code: `import numpy as np
+
+def relu(x):
+    return np.maximum(0, x)
+
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / e.sum()
+
+# Network: 2 inputs → 3 hidden → 2 outputs
+W1 = np.array([[0.2, -0.5], [0.3, 0.8], [-0.1, 0.4]])
+b1 = np.array([0.1, -0.2, 0.05])
+W2 = np.array([[0.5, -0.3, 0.2], [-0.4, 0.6, -0.1]])
+b2 = np.array([0.05, -0.05])
+
+x = np.array([1.0, 0.5])
+
+print("Neural Network Forward Pass")
+print("-" * 30)
+print(f"Input:        {x}")
+
+# Hidden layer
+z1 = W1 @ x + b1
+h = relu(z1)
+print(f"Hidden (pre): {z1}")
+print(f"Hidden (act): {h}")
+
+# Output layer
+z2 = W2 @ h + b2
+out = softmax(z2)
+print(f"Output (raw): {z2}")
+print(f"Output (prob): {out}")
+print(f"Predicted class: {np.argmax(out)}")`
+    },
+    tokenize: {
+      filename: 'tokenize.py',
+      code: `text = "AI transforms business operations!"
+
+# Word tokenization
+words = text.lower().replace("!", "").split()
+print("Words:", words)
+
+# Character tokenization
+chars = list(text)
+print("Chars:", chars)
+
+# Subword (naive BPE-style)
+vocab = {"ai", "trans", "form", "s", "busin", "ess", "oper", "ation", "!"}
+tokens = []
+i = 0
+while i < len(text):
+    matched = False
+    for j in range(len(text), i, -1):
+        sub = text[i:j].lower()
+        if sub in vocab:
+            tokens.append(sub)
+            i = j
+            matched = True
+            break
+    if not matched:
+        tokens.append(text[i])
+        i += 1
+
+print("Subwords:", tokens)`
+    },
+    attention: {
+      filename: 'attention.py',
+      code: `import numpy as np
+
+# Self-attention from scratch
+def softmax(x):
+    e = np.exp(x - np.max(x, axis=-1, keepdims=True))
+    return e / np.sum(e, axis=-1, keepdims=True)
+
+# Query vectors for 3 words
+d_k = 4
+Q = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [1, 1, 0, 0]])
+K = Q.copy()
+V = np.array([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]])
+
+# Attention scores
+scores = Q @ K.T / np.sqrt(d_k)
+weights = softmax(scores)
+output = weights @ V
+
+print("Self-Attention Demo")
+print("-" * 30)
+print("Attention weights:")
+for i, row in enumerate(weights):
+    print(f"  Word {i}: {[f'{v:.3f}' for v in row]}")
+print(f"\nOutput shape: {output.shape}")
+print("Output[0]:", np.round(output[0], 3))`
+    },
+    roi: {
+      filename: 'roi.py',
+      code: `def calculate_ai_roi(cost, revenue_lift, efficiency_savings, months):
+    total_benefit = revenue_lift + efficiency_savings
+    roi = ((total_benefit - cost) / cost) * 100
+    payback = cost / (total_benefit / months)
+    return roi, payback
+
+# Customer churn prediction model
+cost = 150_000
+revenue_lift = 420_000
+efficiency = 80_000
+months = 12
+
+roi, payback = calculate_ai_roi(cost, revenue_lift, efficiency, months)
+
+print("AI ROI Calculator")
+print("-" * 30)
+print(f"Investment:     ${cost:,}")
+print(f"Revenue lift:   ${revenue_lift:,}")
+print(f"Efficiency:     ${efficiency:,}")
+print(f"ROI:            {roi:.1f}%")
+print(f"Payback period: {payback:.1f} months")
+print(f"Net benefit:    ${revenue_lift + efficiency - cost:,}")`
+    },
+    churn: {
+      filename: 'churn.py',
+      code: `# Simple logistic regression for churn
+import numpy as np
+
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+# [tenure_months, monthly_charges, support_tickets]
+X = np.array([[24, 65, 2], [6, 45, 5], [36, 80, 1], [12, 55, 3]])
+y = np.array([0, 1, 0, 1])  # 1 = churned
+
+# Trained weights (simplified)
+w = np.array([0.15, -0.02, 0.4])
+b = -0.5
+
+for i, x in enumerate(X):
+    prob = sigmoid(np.dot(x, w) + b)
+    pred = 1 if prob > 0.5 else 0
+    status = "CHURN" if pred == 1 else "RETAIN"
+    print(f"Customer {i+1}: {status} (prob: {prob:.3f})")`
+    },
+    fraud: {
+      filename: 'fraud.py',
+      code: `# Naive Bayes-style fraud detection
+import numpy as np
+
+def detect_fraud(amount, freq_7d, intl_ratio):
+    # Simplified scoring
+    score = 0
+    if amount > 5000: score += 3
+    if freq_7d > 10: score += 2
+    if intl_ratio > 0.5: score += 2
+    if amount > 1000 and freq_7d > 5: score += 2
+
+    if score >= 6: return "FRAUD", score
+    if score >= 3: return "SUSPICIOUS", score
+    return "LEGITIMATE", score
+
+transactions = [
+    (120, 2, 0.0),
+    (8000, 15, 0.8),
+    (300, 1, 0.0),
+    (2500, 8, 0.6)
+]
+
+print("Fraud Detection Results")
+print("-" * 35)
+for amount, freq, intl in transactions:
+    result, score = detect_fraud(amount, freq, intl)
+    print(f"${amount:>6} | freq:{freq:>2} | intl:{intl:.1f} | {result:>12} (score:{score})")`
+    }
+  };
+
+  async function initPyodidePlayground() {
+    const loader = document.getElementById('pyodideLoader');
+    const grid = document.getElementById('playgroundGrid');
+    const editor = document.getElementById('codeEditor');
+    const runBtn = document.getElementById('runBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const outputBody = document.getElementById('outputBody');
+    const outputStatus = document.getElementById('outputStatus');
+    const filenameLabel = document.getElementById('currentFilename');
+
+    if (!loader || !grid) return; // Not on demos.html
+
+    // Load Pyodide from CDN
+    if (!pyodideInstance && !pyodideLoading) {
+      pyodideLoading = true;
+      try {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+        script.async = true;
+        document.head.appendChild(script);
+
+        await new Promise((resolve, reject) => {
+          script.onload = resolve;
+          script.onerror = reject;
+        });
+
+        const { loadPyodide } = window;
+        pyodideInstance = await loadPyodide({
+          indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'
+        });
+        await pyodideInstance.loadPackage('numpy');
+
+        pyodideLoading = false;
+        loader.classList.add('hidden');
+        grid.style.display = 'grid';
+        showToast('Python runtime ready! 🐍', '🎉');
+      } catch (err) {
+        pyodideLoading = false;
+        loader.innerHTML = `
+          <div style="text-align:center;max-width:400px;">
+            <div style="font-size:3rem;margin-bottom:16px;">⚠️</div>
+            <div style="font-family:var(--font-mono);font-size:0.9rem;color:var(--accent-coral);margin-bottom:8px;">Failed to load Python runtime</div>
+            <div style="font-size:0.8rem;color:var(--ink-mute);">${escapeHtml(err.message)}</div>
+          </div>
+        `;
+        console.error('Pyodide load error:', err);
+        return;
+      }
+    }
+
+    // Example buttons
+    document.querySelectorAll('.example-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-example');
+        const ex = PYODIDE_EXAMPLES[key];
+        if (!ex) return;
+        document.querySelectorAll('.example-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        editor.value = ex.code;
+        if (filenameLabel) filenameLabel.textContent = ex.filename;
+      });
+    });
+
+    // Run button
+    if (runBtn) {
+      runBtn.addEventListener('click', async () => {
+        if (!pyodideInstance) return;
+        runBtn.disabled = true;
+        runBtn.textContent = '⏳ Running...';
+        outputStatus.textContent = 'Running';
+        outputStatus.className = 'output-status running';
+        outputBody.innerHTML = '<span style="color:var(--ink-mute)">Executing...</span>';
+
+        try {
+          // Redirect stdout/stderr
+          pyodideInstance.setStdout({ batched: (text) => {
+            // stdout captured below via pyodide.runPython output
+          }});
+          pyodideInstance.setStderr({ batched: (text) => {
+            // stderr captured below
+          }});
+
+          // Use a simpler capture approach compatible with this Pyodide version
+          const captureCode = `
+import sys
+from io import StringIO
+
+_old_stdout = sys.stdout
+_old_stderr = sys.stderr
+sys.stdout = _capture = StringIO()
+sys.stderr = _capture_err = StringIO()
+
+exec(open('/dev/null').read())
+`;
+          // Actually, simpler: wrap user code
+          const userCode = editor.value;
+          const wrapped = `
+import sys
+from io import StringIO
+_capture = StringIO()
+_capture_err = StringIO()
+sys.stdout = _capture
+sys.stderr = _capture_err
+
+try:
+    ${userCode.replace(/^/gm, '    ')}
+except Exception as e:
+    import traceback
+    _capture_err.write(traceback.format_exc())
+
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
+
+(_capture.getvalue(), _capture_err.getvalue())
+`;
+          const result = await pyodideInstance.runPythonAsync(wrapped);
+          const [stdout, stderr] = result.toJs ? result.toJs() : result;
+
+          outputBody.innerHTML = '';
+          if (stdout) {
+            outputBody.innerHTML += `<span class="output-prompt">➜</span>${escapeHtml(stdout)}`;
+          }
+          if (stderr) {
+            outputBody.innerHTML += `\n\n<span style="color:var(--accent-coral)">${escapeHtml(stderr)}</span>`;
+          }
+          if (!stdout && !stderr) {
+            outputBody.innerHTML = '<span class="output-placeholder">No output. Did you print anything?</span>';
+          }
+
+          outputStatus.textContent = stderr ? 'Error' : 'Done';
+          outputStatus.className = stderr ? 'output-status error' : 'output-status ready';
+        } catch (err) {
+          outputBody.innerHTML = `<span style="color:var(--accent-coral)">${escapeHtml(err.message || String(err))}</span>`;
+          outputStatus.textContent = 'Error';
+          outputStatus.className = 'output-status error';
+        } finally {
+          runBtn.disabled = false;
+          runBtn.textContent = '▶ Run';
+        }
+      });
+    }
+
+    // Reset button
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        editor.value = '# Type your Python code here...\n';
+        outputBody.innerHTML = '<span class="output-placeholder">Click Run to see output here...</span>';
+        outputStatus.textContent = 'Ready';
+        outputStatus.className = 'output-status ready';
+        document.querySelectorAll('.example-btn').forEach(b => b.classList.remove('active'));
+        if (filenameLabel) filenameLabel.textContent = 'script.py';
+      });
+    }
+
+    // Tab key support in textarea
+    if (editor) {
+      editor.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const start = editor.selectionStart;
+          const end = editor.selectionEnd;
+          editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+          editor.selectionStart = editor.selectionEnd = start + 4;
+        }
+      });
+    }
+  }
+
   // ── Utilities ───────────────────────────
   function escapeHtml(str) {
     const div = document.createElement('div');
@@ -727,6 +1161,9 @@
       updateProgressRing();
       renderPhases();
     });
+
+    // Pyodide Playground (demos.html)
+    initPyodidePlayground();
   });
 
 })();
