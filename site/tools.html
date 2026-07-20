@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools & Resources — AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="Essential tools, frameworks, and resources for AI systems engineering.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .tools-page { padding-top: 64px; }
+    .tools-hero {
+      padding: 80px 24px 48px;
+      text-align: center;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .tools-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .tools-hero p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .tools-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    .tools-section {
+      margin-bottom: 48px;
+    }
+    .tools-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .tool-card {
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+      padding: 20px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .tool-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+    .tool-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .tool-card h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .tool-card h3 a:hover {
+      color: var(--accent);
+    }
+    .tool-card p {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .tool-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tool-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      background: var(--bg-soft);
+      border: 1px solid var(--ink-faint);
+      color: var(--ink-mute);
+    }
+    .resources-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .resource-item {
+      display: flex;
+      align-items: start;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+    }
+    .resource-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .resource-info h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .resource-info h4 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .resource-info h4 a:hover {
+      color: var(--accent);
+    }
+    .resource-info p {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="index.html#demos">Demos</a>
+        <a href="index.html#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="tools-page" id="main">
+    <div class="tools-hero">
+      <h1>Tools & Resources</h1>
+      <p>The essential toolkit for AI systems engineering — frameworks, platforms, and learning resources we recommend.</p>
+    </div>
+
+    <div class="tools-content">
+      <div class="tools-section">
+        <h2>🧠 ML / DL Frameworks</h2>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h3><a href="https://pytorch.org" target="_blank" rel="noopener">PyTorch</a></h3>
+            <p>The most popular deep learning framework. Dynamic computation graphs, excellent debugging, huge ecosystem.</p>
+            <div class="tool-tags"><span class="tool-tag">Deep Learning</span><span class="tool-tag">Python</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://jax.readthedocs.io" target="_blank" rel="noopener">JAX</a></h3>
+            <p>Google's NumPy-compatible library with automatic differentiation, JIT compilation, and multi-device support.</p>
+            <div class="tool-tags"><span class="tool-tag">Research</span><span class="tool-tag">Functional</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://www.tensorflow.org" target="_blank" rel="noopener">TensorFlow</a></h3>
+            <p>Production-focused framework with excellent deployment tools (TF Serving, TF Lite, TF.js).</p>
+            <div class="tool-tags"><span class="tool-tag">Production</span><span class="tool-tag">Google</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://scikit-learn.org" target="_blank" rel="noopener">scikit-learn</a></h3>
+            <p>Classic machine learning toolkit. Random forests, SVMs, clustering, preprocessing — all in clean Python.</p>
+            <div class="tool-tags"><span class="tool-tag">Classical ML</span><span class="tool-tag">Data Science</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <h2>🤖 LLM & NLP Tools</h2>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h3><a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a></h3>
+            <p>The GitHub of ML. Model hub, datasets, inference APIs, and the Transformers library.</p>
+            <div class="tool-tags"><span class="tool-tag">Models</span><span class="tool-tag">Community</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://www.langchain.com" target="_blank" rel="noopener">LangChain</a></h3>
+            <p>Framework for building LLM applications. Chains, agents, memory, and tool integration.</p>
+            <div class="tool-tags"><span class="tool-tag">Agents</span><span class="tool-tag">Orchestration</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper</a></h3>
+            <p>OpenAI's speech recognition model. Accurate, multilingual, and open source.</p>
+            <div class="tool-tags"><span class="tool-tag">ASR</span><span class="tool-tag">Audio</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://github.com/microsoft/promptflow" target="_blank" rel="noopener">Prompt Flow</a></h3>
+            <p>Microsoft's tool for building, evaluating, and deploying LLM workflows.</p>
+            <div class="tool-tags"><span class="tool-tag">Workflows</span><span class="tool-tag">Azure</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <h2>🗄️ Vector Databases</h2>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h3><a href="https://www.trychroma.com" target="_blank" rel="noopener">ChromaDB</a></h3>
+            <p>Developer-friendly vector database. Easy to set up, great for prototyping.</p>
+            <div class="tool-tags"><span class="tool-tag">Open Source</span><span class="tool-tag">Python</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://www.pinecone.io" target="_blank" rel="noopener">Pinecone</a></h3>
+            <p>Managed vector database with hybrid search and metadata filtering. Production-ready.</p>
+            <div class="tool-tags"><span class="tool-tag">Managed</span><span class="tool-tag">Cloud</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://weaviate.io" target="_blank" rel="noopener">Weaviate</a></h3>
+            <p>Open-source vector database with GraphQL interface and modular AI integrations.</p>
+            <div class="tool-tags"><span class="tool-tag">GraphQL</span><span class="tool-tag">Modular</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a></h3>
+            <p>Vector extension for PostgreSQL. Store vectors alongside your relational data.</p>
+            <div class="tool-tags"><span class="tool-tag">Postgres</span><span class="tool-tag">SQL</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <h2>🚀 Deployment & MLOps</h2>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h3><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></h3>
+            <p>Modern, fast web framework for building APIs. Automatic docs, type hints, async support.</p>
+            <div class="tool-tags"><span class="tool-tag">API</span><span class="tool-tag">Python</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://www.docker.com" target="_blank" rel="noopener">Docker</a></h3>
+            <p>Containerize your ML models for consistent deployment anywhere.</p>
+            <div class="tool-tags"><span class="tool-tag">Containers</span><span class="tool-tag">DevOps</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://kubernetes.io" target="_blank" rel="noopener">Kubernetes</a></h3>
+            <p>Orchestrate containers at scale. Essential for production ML systems.</p>
+            <div class="tool-tags"><span class="tool-tag">Orchestration</span><span class="tool-tag">Scale</span></div>
+          </div>
+          <div class="tool-card">
+            <h3><a href="https://github.com/bentoml/BentoML" target="_blank" rel="noopener">BentoML</a></h3>
+            <p>Framework for serving ML models. Build APIs, batch jobs, and edge deployments.</p>
+            <div class="tool-tags"><span class="tool-tag">Serving</span><span class="tool-tag">Model Ops</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <h2>📚 Learning Resources</h2>
+        <div class="resources-list">
+          <div class="resource-item">
+            <div class="resource-icon">📖</div>
+            <div class="resource-info">
+              <h4><a href="https://github.com/karpathy/nn-zero-to-hero" target="_blank" rel="noopener">Neural Networks: Zero to Hero</a></h4>
+              <p>Andrej Karpathy's video course building neural nets from scratch. The best introduction to deep learning.</p>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">🎓</div>
+            <div class="resource-info">
+              <h4><a href="https://cs229.stanford.edu" target="_blank" rel="noopener">Stanford CS229</a></h4>
+              <p>Andrew Ng's machine learning course. The classic introduction to ML theory and algorithms.</p>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">📝</div>
+            <div class="resource-info">
+              <h4><a href="https://d2l.ai" target="_blank" rel="noopener">Dive into Deep Learning</a></h4>
+              <p>Interactive book with code, math, and discussions. Completely free and comprehensive.</p>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="resource-icon">🔬</div>
+            <div class="resource-info">
+              <h4><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners</a></h4>
+              <p>Microsoft's 12-lesson course covering everything from prompt engineering to fine-tuning.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="demos.html">Playground</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
