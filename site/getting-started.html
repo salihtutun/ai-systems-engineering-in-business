@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="Start your journey into AI Systems Engineering. Setup guide, prerequisites, and your first steps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .getting-started-page { padding-top: 64px; }
+    .gs-hero {
+      padding: 80px 24px 48px;
+      text-align: center;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .gs-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .gs-hero p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .gs-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    .gs-section {
+      margin-bottom: 48px;
+    }
+    .gs-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .gs-section p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+    }
+    .gs-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .gs-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 20px;
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+    }
+    .gs-step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .gs-step h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .gs-step p {
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .gs-tip {
+      background: var(--bg-soft);
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .gs-tip h4 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .gs-tip p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .gs-cta {
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--bg-soft);
+      border-top: 1px solid var(--ink-faint);
+    }
+    .gs-cta h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+    .gs-cta .btn {
+      margin: 8px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="index.html#demos">Demos</a>
+        <a href="index.html#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="getting-started-page" id="main">
+    <div class="gs-hero">
+      <h1>Getting Started</h1>
+      <p>Your first steps into AI Systems Engineering. No prior experience needed — just curiosity and a computer.</p>
+    </div>
+
+    <div class="gs-content">
+      <div class="gs-section">
+        <h2>What You'll Need</h2>
+        <div class="gs-steps">
+          <div class="gs-step">
+            <div class="gs-step-num">1</div>
+            <div>
+              <h3>A Computer</h3>
+              <p>Any laptop or desktop with 8GB+ RAM works. For deep learning phases, we'll use free cloud GPUs (Google Colab) so you don't need expensive hardware.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">2</div>
+            <div>
+              <h3>Python Basics</h3>
+              <p>If you know variables, loops, and functions, you're ready. If not, start with Phase 1 — we cover everything from scratch.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">3</div>
+            <div>
+              <h3>High School Math</h3>
+              <p>Algebra and basic statistics are enough. We teach linear algebra and calculus concepts as we go, in context.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">4</div>
+            <div>
+              <h3>Patience</h3>
+              <p>Building AI systems takes time. Expect to spend 2-4 hours per week per phase. The journey is the destination.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gs-section">
+        <h2>How This Works</h2>
+        <p>This curriculum is built around the idea that <strong>learning by building</strong> beats passively consuming content. Each phase includes:</p>
+        <ul style="margin: 16px 0; padding-left: 24px; color: var(--ink-soft); line-height: 1.8;">
+          <li><strong>Concepts</strong> — Plain-english explanations of the theory</li>
+          <li><strong>Code</strong> — Build algorithms from scratch before using frameworks</li>
+          <li><strong>Business Context</strong> — How each concept applies to real business problems</li>
+          <li><strong>Quizzes</strong> — Test your understanding with instant feedback</li>
+          <li><strong>Playground</strong> — Experiment with code right in your browser</li>
+        </ul>
+        <div class="gs-tip">
+          <h4>💡 Pro Tip</h4>
+          <p>Don't rush through phases. Understanding > completion. If a concept doesn't click, try implementing it yourself before moving on.</p>
+        </div>
+      </div>
+
+      <div class="gs-section">
+        <h2>Your First 5 Minutes</h2>
+        <div class="gs-steps">
+          <div class="gs-step">
+            <div class="gs-step-num">1</div>
+            <div>
+              <h3>Try the Playground</h3>
+              <p>Head to <a href="demos.html">the Python Playground</a> and run your first code snippet. No installation needed — it runs entirely in your browser using Pyodide.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">2</div>
+            <div>
+              <h3>Explore Phase 1</h3>
+              <p>Start with <a href="index.html#curriculum">Business Foundations</a>. Click on a phase card to see its lessons, then click any lesson to dive in.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">3</div>
+            <div>
+              <h3>Track Your Progress</h3>
+              <p>Click the '+' button on any lesson to mark it complete. Your progress is saved automatically in your browser.</p>
+            </div>
+          </div>
+          <div class="gs-step">
+            <div class="gs-step-num">4</div>
+            <div>
+              <h3>Take a Quiz</h3>
+              <p>Test what you've learned with our <a href="index.html#quiz">built-in quizzes</a>. Instant feedback, no pressure.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gs-section">
+        <h2>Recommended Path</h2>
+        <p>While you can jump around, we recommend this order:</p>
+        <ol style="margin: 16px 0; padding-left: 24px; color: var(--ink-soft); line-height: 1.8;">
+          <li><strong>Phases 0-3</strong> — Fundamentals (Python, stats, ML basics)</li>
+          <li><strong>Phases 4-6</strong> — Core AI (Deep learning, NLP, transformers)</li>
+          <li><strong>Phases 7-9</strong> — Systems (MLOps, cloud, agents)</li>
+          <li><strong>Phases 10-14</strong> — Specialized (Vision, time series, recommenders)</li>
+          <li><strong>Phases 15-19</strong> — Advanced (GenAI, ethics, capstone)</li>
+        </ol>
+        <p>Check out the <a href="roadmap.html">full roadmap</a> for a visual timeline with time estimates.</p>
+      </div>
+
+      <div class="gs-section">
+        <h2>Getting Help</h2>
+        <p>Stuck? Here are your options:</p>
+        <ul style="margin: 16px 0; padding-left: 24px; color: var(--ink-soft); line-height: 1.8;">
+          <li><strong>📖 Glossary</strong> — Look up confusing terms in our <a href="glossary.html">plain-english glossary</a></li>
+          <li><strong>🔍 Search</strong> — Press ⌘K anywhere on the site to search all content</li>
+          <li><strong>🐛 GitHub Issues</strong> — Found a bug or unclear explanation? <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business/issues" target="_blank">Open an issue</a></li>
+          <li><strong>💬 Community</strong> — Join discussions on GitHub</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gs-cta">
+      <h2>Ready to Start?</h2>
+      <a href="index.html#curriculum" class="btn btn-primary btn-large">Explore Curriculum →</a>
+      <a href="demos.html" class="btn btn-secondary btn-large">Try the Playground 🐍</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="demos.html">Playground</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
