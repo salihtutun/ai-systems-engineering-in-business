@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Roadmap — AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="A clear roadmap for learning AI Systems Engineering in Business — from Python basics to production deployment.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .roadmap-page { padding-top: 64px; }
+    .roadmap-hero {
+      padding: 80px 24px 48px;
+      text-align: center;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .roadmap-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .roadmap-hero p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .roadmap-timeline {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      position: relative;
+    }
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute;
+      left: 40px;
+      top: 48px;
+      bottom: 48px;
+      width: 2px;
+      background: var(--ink-faint);
+    }
+    .roadmap-phase {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .roadmap-phase-marker {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--bg);
+      position: relative;
+      z-index: 1;
+    }
+    .roadmap-phase-content {
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+      padding: 24px;
+    }
+    .roadmap-phase-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .roadmap-phase-content p {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .roadmap-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .roadmap-skill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      background: var(--bg-soft);
+      border: 1px solid var(--ink-faint);
+      color: var(--ink-soft);
+    }
+    .roadmap-duration {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-mute);
+      margin-top: 12px;
+    }
+    .roadmap-prereqs {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    .roadmap-prereqs h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+    .prereq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .prereq-card {
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+      padding: 20px;
+    }
+    .prereq-card h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .prereq-card p {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+    @media (max-width: 600px) {
+      .roadmap-timeline::before {
+        left: 20px;
+      }
+      .roadmap-phase {
+        grid-template-columns: 40px 1fr;
+        gap: 16px;
+      }
+      .roadmap-phase-marker {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="index.html#demos">Demos</a>
+        <a href="index.html#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="roadmap-page" id="main">
+    <div class="roadmap-hero">
+      <h1>Learning Roadmap</h1>
+      <p>A clear path from Python basics to deploying production AI systems. Each phase builds on the previous, with business context throughout.</p>
+    </div>
+
+    <div class="roadmap-timeline">
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">01</div>
+        <div class="roadmap-phase-content">
+          <h3>Python Fundamentals</h3>
+          <p>Master Python basics, data structures, and object-oriented programming. Essential for any AI engineer.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Variables & Types</span>
+            <span class="roadmap-skill">Functions</span>
+            <span class="roadmap-skill">OOP</span>
+            <span class="roadmap-skill">Modules</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 2-3 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">02</div>
+        <div class="roadmap-phase-content">
+          <h3>Data Structures & Algorithms</h3>
+          <p>Learn the foundational data structures and algorithms that power AI systems.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Arrays & Lists</span>
+            <span class="roadmap-skill">Hash Maps</span>
+            <span class="roadmap-skill">Trees & Graphs</span>
+            <span class="roadmap-skill">Sorting</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 2-3 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">03</div>
+        <div class="roadmap-phase-content">
+          <h3>Linear Algebra & NumPy</h3>
+          <p>The mathematical foundation of machine learning. Vectors, matrices, and tensor operations.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Vectors & Matrices</span>
+            <span class="roadmap-skill">Matrix Operations</span>
+            <span class="roadmap-skill">Eigenvalues</span>
+            <span class="roadmap-skill">NumPy</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 2-3 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">04</div>
+        <div class="roadmap-phase-content">
+          <h3>Machine Learning Foundations</h3>
+          <p>Supervised and unsupervised learning, feature engineering, and model evaluation.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Regression</span>
+            <span class="roadmap-skill">Classification</span>
+            <span class="roadmap-skill">Clustering</span>
+            <span class="roadmap-skill">Evaluation Metrics</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 3-4 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">05</div>
+        <div class="roadmap-phase-content">
+          <h3>Deep Learning</h3>
+          <p>Neural networks, backpropagation, CNNs, RNNs, and modern architectures.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">PyTorch</span>
+            <span class="roadmap-skill">CNNs</span>
+            <span class="roadmap-skill">RNNs / LSTMs</span>
+            <span class="roadmap-skill">Training & Optimization</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 4-5 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">06</div>
+        <div class="roadmap-phase-content">
+          <h3>Transformers & LLMs</h3>
+          <p>Attention mechanisms, transformer architectures, and building language models from scratch.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Attention</span>
+            <span class="roadmap-skill">Transformers</span>
+            <span class="roadmap-skill">BERT & GPT</span>
+            <span class="roadmap-skill">Tokenization</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 4-5 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">07</div>
+        <div class="roadmap-phase-content">
+          <h3>Generative AI</h3>
+          <p>VAEs, GANs, diffusion models, and modern generative architectures.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">VAEs</span>
+            <span class="roadmap-skill">GANs</span>
+            <span class="roadmap-skill">Diffusion Models</span>
+            <span class="roadmap-skill">Stable Diffusion</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 3-4 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">08</div>
+        <div class="roadmap-phase-content">
+          <h3>Reinforcement Learning</h3>
+          <p>MDPs, Q-learning, policy gradients, and training agents to make decisions.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">MDPs</span>
+            <span class="roadmap-skill">Q-Learning</span>
+            <span class="roadmap-skill">Policy Gradients</span>
+            <span class="roadmap-skill">PPO</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 3-4 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">09</div>
+        <div class="roadmap-phase-content">
+          <h3>LLMs from Scratch</h3>
+          <p>Build and train your own language models. Tokenization, pre-training, fine-tuning, and RLHF.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Tokenizers</span>
+            <span class="roadmap-skill">Pre-training</span>
+            <span class="roadmap-skill">SFT & DPO</span>
+            <span class="roadmap-skill">Evaluation</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 5-6 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">10</div>
+        <div class="roadmap-phase-content">
+          <h3>LLM Engineering</h3>
+          <p>Prompt engineering, RAG, function calling, and building production LLM applications.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Prompt Engineering</span>
+            <span class="roadmap-skill">RAG Systems</span>
+            <span class="roadmap-skill">Function Calling</span>
+            <span class="roadmap-skill">Production Apps</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 4-5 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">11</div>
+        <div class="roadmap-phase-content">
+          <h3>Multimodal AI</h3>
+          <p>Vision transformers, CLIP, multimodal RAG, and cross-modal understanding.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">Vision Transformers</span>
+            <span class="roadmap-skill">CLIP</span>
+            <span class="roadmap-skill">Multimodal RAG</span>
+            <span class="roadmap-skill">Agents</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 3-4 weeks</div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-marker" style="background: var(--accent);">12</div>
+        <div class="roadmap-phase-content">
+          <h3>MLOps & Production</h3>
+          <p>Deploy models, monitor performance, and build scalable AI infrastructure.</p>
+          <div class="roadmap-skills">
+            <span class="roadmap-skill">FastAPI</span>
+            <span class="roadmap-skill">Docker</span>
+            <span class="roadmap-skill">Monitoring</span>
+            <span class="roadmap-skill">CI/CD</span>
+          </div>
+          <div class="roadmap-duration">⏱️ 3-4 weeks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-prereqs">
+      <h2>Prerequisites</h2>
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <h4>🐍 Python Basics</h4>
+          <p>Comfort with variables, loops, functions, and basic data structures. If you're new, start with Phase 1.</p>
+        </div>
+        <div class="prereq-card">
+          <h4>📊 High School Math</h4>
+          <p>Algebra, basic statistics, and an openness to learn linear algebra and calculus concepts as you go.</p>
+        </div>
+        <div class="prereq-card">
+          <h4>💻 Computer Access</h4>
+          <p>A laptop with 8GB+ RAM. For deep learning phases, Google Colab or a cloud GPU is helpful.</p>
+        </div>
+        <div class="prereq-card">
+          <h4>🔍 Curiosity</h4>
+          <p>The most important prerequisite. You'll be building things from scratch, which requires patience and persistence.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="demos.html">Playground</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
