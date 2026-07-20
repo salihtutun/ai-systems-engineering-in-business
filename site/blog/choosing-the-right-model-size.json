@@ -1,0 +1,71 @@
+{
+  "slug": "choosing-the-right-model-size",
+  "title": "Choosing the Right Model Size: When Bigger Isn't Better",
+  "category": "Strategy",
+  "tags": ["llm", "model-size", "cost", "optimization", "business"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-06-15",
+  "readingTime": 8,
+  "excerpt": "GPT-4 is impressive, but do you need it? Often, a smaller model is faster, cheaper, and good enough.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Size Trap"
+    },
+    {
+      "type": "paragraph",
+      "text": "There's a natural instinct to use the biggest, most capable model available. GPT-4 for everything! But bigger models cost more, run slower, and aren't always necessary. Smart model selection is a key engineering skill."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Decision Framework"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ask these questions before choosing a model:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Is the task complex reasoning or simple classification?",
+        "What's the latency requirement (real-time chat vs batch processing)?",
+        "What's the budget per 1K requests?",
+        "Do we need the model to follow complex instructions?",
+        "Is the output safety-critical (medical, legal, financial)?"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Tiers"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here's a practical tiering:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Small models (7B params): Classification, sentiment, extraction. Cheap and fast.",
+        "Medium models (13-30B params): Summarization, translation, simple Q&A. Good balance.",
+        "Large models (70B+ params): Complex reasoning, coding, creative writing. Use sparingly.",
+        "Frontier models (GPT-4, Claude 3): When accuracy is critical and cost is secondary."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Cost Reality"
+    },
+    {
+      "type": "paragraph",
+      "text": "A 7B parameter model running locally costs ~$0.0001 per 1K tokens. GPT-4 costs ~$0.03 per 1K tokens. For a customer support bot handling 1M tokens/day, that's $30 vs $3,000 per month — a 100x difference."
+    },
+    {
+      "type": "paragraph",
+      "text": "The best approach: start small, measure accuracy, and upgrade only when the task demands it. Your CFO will thank you."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "slug": "data-quality-over-quantity",
+  "title": "Data Quality Over Quantity: Why Small Clean Datasets Beat Big Messy Ones",
+  "category": "Engineering",
+  "tags": ["data", "quality", "mlops", "training", "best-practices"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-06-28",
+  "readingTime": 7,
+  "excerpt": "A model trained on 1,000 clean examples often outperforms one trained on 100,000 noisy ones. Here's why data quality matters more than quantity.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Myth of More Data"
+    },
+    {
+      "type": "paragraph",
+      "text": "There's a persistent myth in AI: more data is always better. Companies spend millions scraping the internet, thinking bigger datasets guarantee better models. But the dirty secret is that data quality matters far more than quantity."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Cost of Bad Data"
+    },
+    {
+      "type": "paragraph",
+      "text": "Bad data has compounding costs:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Labeling errors teach the model incorrect patterns",
+        "Duplicate examples waste training budget",
+        "Biased data produces biased models that create legal liability",
+        "Irrelevant examples dilute signal and confuse learning"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Data Quality Flywheel"
+    },
+    {
+      "type": "paragraph",
+      "text": "Smart teams invest in data quality early. They:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Audit 10% of labels manually before training",
+        "Use active learning to prioritize uncertain examples for review",
+        "Track data lineage and version datasets like code",
+        "Build automated checks for class balance and outliers"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Business Impact"
+    },
+    {
+      "type": "paragraph",
+      "text": "A retail client we worked with had 500,000 product reviews labeled for sentiment. Manual audit found 15% label errors. Fixing just those errors improved model accuracy from 78% to 89% — a bigger gain than doubling the dataset size."
+    },
+    {
+      "type": "paragraph",
+      "text": "The lesson: before investing in more data, invest in understanding your current data. A day of manual review often beats a week of training on garbage."
+    }
+  ]
+}

@@ -31,6 +31,7 @@
         <a href="#quiz">Quiz</a>
         <a href="demos.html">Playground</a>
         <a href="blog.html">Blog</a>
+        <a href="certificate.html">Certificate</a>
         <a href="#about">About</a>
       </nav>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -295,6 +296,121 @@ print(f"Payback: {payback:.1f} months")</code></pre></div>
           <div class="demo-actions">
             <button class="btn btn-primary btn-small demo-run-btn" data-demo="roi-calc">▶ Run Example</button>
             <span class="demo-result" id="demo-roi-calc"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: K-Means Clustering -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-indigo)">
+          <div class="demo-header">
+            <span class="demo-tag">ML</span>
+            <span class="demo-title">K-Means Clustering</span>
+          </div>
+          <div class="demo-code"><pre><code>import random
+
+# Customer segments: [age, annual_spend]
+customers = [
+    [25, 1200], [30, 1500], [28, 1300],
+    [45, 4500], [50, 5000], [48, 4200],
+    [35, 2800], [38, 3100], [33, 2500]
+]
+
+# K-means with k=3
+k = 3
+centroids = random.sample(customers, k)
+
+for iteration in range(5):
+    clusters = [[] for _ in range(k)]
+    for customer in customers:
+        dists = [sum((a-b)**2 for a,b in zip(customer, c)) for c in centroids]
+        clusters[dists.index(min(dists))].append(customer)
+    
+    for i in range(k):
+        if clusters[i]:
+            centroids[i] = [sum(c[j] for c in clusters[i])/len(clusters[i]) for j in range(2)]
+
+for i, cluster in enumerate(clusters):
+    print(f"Segment {i+1}: {len(cluster)} customers, avg age {sum(c[0] for c in cluster)/len(cluster):.0f}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="kmeans">▶ Run Example</button>
+            <span class="demo-result" id="demo-kmeans"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Sentiment Analysis -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-pink)">
+          <div class="demo-header">
+            <span class="demo-tag">NLP</span>
+            <span class="demo-title">Sentiment Analysis</span>
+          </div>
+          <div class="demo-code"><pre><code>def analyze_sentiment(text):
+    positive = ['great', 'excellent', 'love', 'best', 'amazing', 'happy', 'good', 'fantastic']
+    negative = ['bad', 'terrible', 'hate', 'worst', 'awful', 'sad', 'poor', 'disappointing']
+    
+    words = text.lower().split()
+    pos_score = sum(1 for w in words if w in positive)
+    neg_score = sum(1 for w in words if w in negative)
+    
+    if pos_score > neg_score:
+        return "Positive", pos_score - neg_score
+    elif neg_score > pos_score:
+        return "Negative", neg_score - pos_score
+    else:
+        return "Neutral", 0
+
+reviews = [
+    "This product is amazing and works great",
+    "Terrible experience, very disappointing",
+    "It's okay, nothing special"
+]
+
+for review in reviews:
+    sentiment, score = analyze_sentiment(review)
+    print(f"'{review[:30]}...' → {sentiment} (score: {score})")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="sentiment">▶ Run Example</button>
+            <span class="demo-result" id="demo-sentiment"></span>
+          </div>
+        </div>
+
+        <!-- New Demo: Feature Scaling -->
+        <div class="demo-card reveal" style="--card-color:var(--accent-amber)">
+          <div class="demo-header">
+            <span class="demo-tag">Preprocessing</span>
+            <span class="demo-title">Feature Scaling</span>
+          </div>
+          <div class="demo-code"><pre><code># Feature scaling: Normalization vs Standardization
+
+# Raw customer data: [income, age, purchase_count]
+data = [
+    [120000, 45, 52],
+    [35000, 23, 8],
+    [85000, 34, 31],
+    [150000, 52, 78],
+    [42000, 28, 12]
+]
+
+# Min-Max Normalization (0-1)
+def normalize(data):
+    mins = [min(col) for col in zip(*data)]
+    maxs = [max(col) for col in zip(*data)]
+    return [[(x - mn) / (mx - mn) for x, mn, mx in zip(row, mins, maxs)] for row in data]
+
+# Z-Score Standardization
+def standardize(data):
+    means = [sum(col)/len(col) for col in zip(*data)]
+    stds = [(sum((x-m)**2 for x in col)/len(col))**0.5 for col, m in zip(zip(*data), means)]
+    return [[(x - m) / s for x, m, s in zip(row, means, stds)] for row in data]
+
+print("Normalized:")
+for row in normalize(data)[:2]:
+    print(f"  {row}")
+
+print("\nStandardized:")
+for row in standardize(data)[:2]:
+    print(f"  {[round(x, 2) for x in row]}")</code></pre></div>
+          <div class="demo-actions">
+            <button class="btn btn-primary btn-small demo-run-btn" data-demo="scaling">▶ Run Example</button>
+            <span class="demo-result" id="demo-scaling"></span>
           </div>
         </div>
       </div>

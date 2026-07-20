@@ -1,0 +1,67 @@
+{
+  "slug": "ai-ethics-in-business",
+  "title": "AI Ethics in Business: Beyond the Buzzwords",
+  "category": "Strategy",
+  "tags": ["ethics", "responsible-ai", "business", "compliance", "strategy"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-06-20",
+  "readingTime": 9,
+  "excerpt": "Responsible AI isn't just a PR exercise. It's risk management, competitive advantage, and in many jurisdictions, the law.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Why Ethics Matters"
+    },
+    {
+      "type": "paragraph",
+      "text": "In 2018, Amazon scrapped an AI recruiting tool because it discriminated against women. In 2020, Clearview AI faced lawsuits for scraping billions of photos without consent. These aren't edge cases — they're warnings of what happens when ethics is an afterthought."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Business Case"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ethical AI isn't charity. It's business-critical:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "EU AI Act fines up to 6% of global revenue for non-compliance",
+        "Biased models create legal liability and reputational damage",
+        "Explainable models win enterprise contracts over black boxes",
+        "Transparency builds trust with customers and regulators"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Practical Steps"
+    },
+    {
+      "type": "paragraph",
+      "text": "Start with these concrete actions:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Audit training data for demographic representation",
+        "Test model performance across different groups",
+        "Document decision-making process for regulators",
+        "Build human-in-the-loop systems for high-stakes decisions",
+        "Establish an AI ethics review board"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Competitive Advantage"
+    },
+    {
+      "type": "paragraph",
+      "text": "Companies that build ethics into their AI systems from day one have an advantage. Their models are more robust, their processes are audit-ready, and their customers trust them more. In a world where AI regulation is accelerating, proactive ethics is a moat."
+    }
+  ]
+}

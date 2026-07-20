@@ -1,0 +1,78 @@
+{
+  "slug": "ml-model-deployment-patterns",
+  "title": "ML Model Deployment Patterns: From Notebook to Production",
+  "category": "Engineering",
+  "tags": ["deployment", "mlops", "api", "docker", "production"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-06-25",
+  "readingTime": 11,
+  "excerpt": "Your model works in Jupyter Notebook. Now what? Here's how to deploy ML models to production with confidence.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Deployment Gap"
+    },
+    {
+      "type": "paragraph",
+      "text": "Most ML projects die in Jupyter notebooks. The model achieves 95% accuracy on the test set, but never sees a real user. The gap between 'works in notebook' and 'works in production' is where most teams struggle."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Pattern 1: Batch Prediction"
+    },
+    {
+      "type": "paragraph",
+      "text": "The simplest pattern: run the model on a schedule (hourly, daily) and store results in a database. Great for: recommendation systems, customer segmentation, churn prediction."
+    },
+    {
+      "type": "code",
+      "language": "python",
+      "text": "# Batch prediction pipeline
+def batch_predict(model, data, output_table):
+    predictions = model.predict(data)
+    save_to_database(predictions, output_table)
+    
+# Run daily via cron or Airflow
+schedule.every().day.at("02:00").do(batch_predict, model, new_data, "predictions")"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Pattern 2: Real-Time API"
+    },
+    {
+      "type": "paragraph",
+      "text": "Deploy the model as a REST API using FastAPI or Flask. The client sends data, the server returns predictions in milliseconds. Great for: fraud detection, chatbots, search ranking."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Pattern 3: Embedded Model"
+    },
+    {
+      "type": "paragraph",
+      "text": "For mobile or edge devices, export to ONNX, TensorFlow Lite, or Core ML. The model runs locally without network calls. Great for: photo filters, voice assistants, offline prediction."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Checklist"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Version your model (same as code)",
+        "Log predictions for debugging and auditing",
+        "Monitor for data drift — when inputs change, models degrade",
+        "Build rollback capability — deploy new models alongside old ones",
+        "Load test — your model might be fast for 1 user, slow for 1000"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Remember: deployment isn't the finish line. It's where the real work begins. Models degrade over time as the world changes. The best teams monitor, iterate, and improve continuously."
+    }
+  ]
+}
