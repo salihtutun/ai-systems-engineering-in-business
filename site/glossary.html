@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary — AI Systems Engineering in Business</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%234f7dff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%234f7dff'>AI</text></svg>">
+  <meta name="description" content="AI engineering glossary — plain-english explanations of technical terms from Attention to Zero-Shot.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .glossary-page { padding-top: 64px; }
+    .glossary-hero {
+      padding: 80px 24px 48px;
+      text-align: center;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .glossary-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .glossary-hero p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto 24px;
+    }
+    .glossary-search {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .glossary-search input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+      color: var(--ink);
+      outline: none;
+    }
+    .glossary-search::before {
+      content: '🔍';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+    }
+    .glossary-search input:focus {
+      border-color: var(--accent);
+    }
+
+    .glossary-alpha-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      padding: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .glossary-alpha-btn {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--ink-faint);
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .glossary-alpha-btn:hover,
+    .glossary-alpha-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+    .glossary-alpha-btn.empty {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .glossary-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    .glossary-section {
+      margin-bottom: 40px;
+    }
+    .glossary-section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+    }
+    .glossary-item {
+      background: var(--bg);
+      border: 1px solid var(--ink-faint);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .glossary-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-soft);
+    }
+    .glossary-item h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .glossary-says {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-mute);
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: var(--bg-soft);
+      border-left: 3px solid var(--ink-faint);
+    }
+    .glossary-means {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .glossary-why {
+      font-size: 0.85rem;
+      color: var(--ink-mute);
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .glossary-count {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--ink-mute);
+      padding: 16px;
+    }
+    .no-results {
+      text-align: center;
+      padding: 48px;
+      color: var(--ink-mute);
+    }
+    @media (max-width: 600px) {
+      .glossary-alpha-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true">🚀</span>
+        <span class="logo-text">AI <span class="logo-accent">Systems</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="index.html#demos">Demos</a>
+        <a href="index.html#quiz">Quiz</a>
+        <a href="demos.html">Playground</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="search-toggle" data-cmd-palette aria-label="Open search">⌘K</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="glossary-page" id="main">
+    <div class="glossary-hero">
+      <h1>AI Glossary</h1>
+      <p>Plain-english explanations of technical terms. No jargon, no fluff — just what you actually need to know.</p>
+      <div class="glossary-search">
+        <input type="text" id="glossarySearch" placeholder="Search terms..." aria-label="Search glossary">
+      </div>
+    </div>
+
+    <div class="glossary-alpha-nav" id="alphaNav"></div>
+
+    <div class="glossary-count" id="glossaryCount"></div>
+
+    <div class="glossary-content" id="glossaryContent"></div>
+
+    <div class="no-results" id="noResults" style="display:none;">
+      No terms match your search.
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">AI <span class="footer-logo-accent">Systems</span></div>
+        <p>Open-source curriculum for business-minded AI engineers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/SalihTutun/ai-systems-engineering-in-business" target="_blank" rel="noopener">GitHub</a>
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="demos.html">Playground</a>
+      </div>
+      <div class="footer-copy">
+        <p>MIT License — free to use and contribute.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Glossary data embedded directly
+    const GLOSSARY = [
+      { term: "Agent", says: "An autonomous AI that thinks and acts on its own", means: "A while loop where an LLM decides what tool to call next, executes it, sees the result, and repeats. Borrowed from philosophy — an 'agent' is anything that can act in the world." },
+      { term: "Attention", says: "How the AI focuses on important parts", means: "A mechanism where every token computes a weighted sum of all other tokens' values, with weights determined by how relevant they are (via dot product of query and key vectors). Named by analogy to human selective attention in the 2017 paper 'Attention Is All You Need'." },
+      { term: "Alignment", says: "Making AI safe", means: "The technical challenge of making an AI system's behavior match human intentions, values, and preferences, including edge cases the designer didn't anticipate." },
+      { term: "Autoregressive", says: "The AI generates one word at a time", means: "A model that predicts the next token conditioned on all previous tokens, then feeds that prediction back as input for the next step. GPT, LLaMA, and Claude are all autoregressive." },
+      { term: "Activation Function", says: "The nonlinear thing between layers", means: "A function applied after each linear layer that introduces nonlinearity. Without it, stacking any number of linear layers collapses to a single linear transformation. ReLU, GELU, and SiLU are the most common. The choice directly affects whether gradients flow during training." },
+      { term: "Adam (Optimizer)", says: "The default optimizer", means: "Adaptive Moment Estimation. Combines momentum (first moment) with adaptive learning rates per parameter (second moment). Has bias correction for early steps. Works well across most tasks without much tuning." },
+      { term: "AdamW", says: "Adam but better", means: "Adam with decoupled weight decay. In standard Adam, L2 regularization gets scaled by the adaptive learning rate per parameter, which is not what you want. AdamW applies weight decay directly to the weights, independent of the gradient statistics. The default optimizer for training transformers." },
+      { term: "Autograd", says: "Automatic gradients", means: "A system that records operations on tensors and automatically computes gradients via reverse-mode differentiation. PyTorch's autograd builds a computation graph on-the-fly (dynamic graph), while JAX uses function transformations (grad). This is what makes backpropagation practical — you write the forward pass, and the framework computes all the derivatives." },
+      { term: "Batch Size", says: "How many examples at once", means: "The number of training examples processed in one forward/backward pass before updating weights. Larger batches give more stable gradient estimates but use more memory. Typical values: 32-512 for training. Batch size interacts with learning rate — double the batch, double the LR (linear scaling rule)." },
+      { term: "Backpropagation", says: "How neural networks learn", means: "An algorithm that computes how much each weight contributed to the error by applying the chain rule backward through the network, then adjusts weights proportionally. Errors propagate backward from output to input, layer by layer." },
+      { term: "Context Window", says: "How much the AI can remember", means: "The maximum number of tokens (input + output) that fit in a single API call. Not memory — it's a fixed-size buffer that resets every call." },
+      { term: "Chain of Thought (CoT)", says: "Making the AI think step by step", means: "A prompting technique where you ask the model to show its reasoning steps, which improves accuracy on multi-step problems because each step conditions the next token generation." },
+      { term: "CNN (Convolutional Neural Network)", says: "Image AI", means: "A neural network that uses convolution operations (sliding filters over the input) to detect local patterns. Stacking convolutions detects increasingly complex features: edges → textures → objects." },
+      { term: "CUDA", says: "GPU programming", means: "NVIDIA's parallel computing platform. Lets you run matrix operations on thousands of GPU cores simultaneously. PyTorch and TensorFlow use CUDA under the hood." },
+      { term: "Chunking", says: "Splitting documents into pieces", means: "Breaking text into segments before embedding for retrieval. Chunk size determines the granularity of search results. Too small: loses context. Too large: dilutes relevance. Typical chunk size: 256-512 tokens with 10-20% overlap." },
+      { term: "Contrastive Learning", says: "Learning by comparison", means: "Training by pulling similar pairs closer and pushing dissimilar pairs apart in embedding space. CLIP uses this: matching image-text pairs vs non-matching ones." },
+      { term: "Cosine Similarity", says: "How similar two vectors are", means: "The cosine of the angle between two vectors: dot(a, b) / (||a|| * ||b||). Ranges from -1 (opposite) to 1 (identical direction). Ignores magnitude, only cares about direction. The standard similarity metric for embeddings and semantic search." },
+      { term: "Cross-Entropy", says: "The classification loss", means: "Measures the difference between two probability distributions. For classification: -sum(y_true * log(y_pred)). For language models: the negative log probability of the correct next token. Lower is better. Perplexity is just exp(cross-entropy)." },
+      { term: "Data Augmentation", says: "Making more training data", means: "Creating modified copies of existing data (rotate images, add noise, paraphrase text) to increase training set diversity without collecting new data. Reduces overfitting." },
+      { term: "Decoder", says: "The output part", means: "In transformers, a decoder uses causal (masked) self-attention so each position can only attend to earlier positions. GPT is decoder-only. BERT is encoder-only. T5 is encoder-decoder." },
+      { term: "Diffusion Model", says: "AI that generates images from noise", means: "A model trained to reverse a gradual noising process — it learns to predict and remove noise, and at generation time starts from pure noise and iteratively denoises." },
+      { term: "DPO (Direct Preference Optimization)", says: "A simpler RLHF", means: "A training method that skips the reward model entirely — it directly optimizes the language model to prefer the better response in pairs of human preferences." },
+      { term: "Dropout", says: "Randomly turning off neurons", means: "During training, randomly set a fraction of activations to zero. Forces the network to not rely on any single neuron. Turned off during inference. Simple but effective regularization." },
+      { term: "Eigenvalue", says: "Some math thing for PCA", means: "For a matrix A, an eigenvalue lambda satisfies Av = lambda*v for some vector v. It tells you how much the matrix scales vectors in that direction. Large eigenvalues = directions of high variance in your data." },
+      { term: "Embedding", says: "Some AI magic that turns words into numbers", means: "A learned mapping from discrete items (words, images, users) to dense vectors in continuous space, where similar items end up close together. The items are 'embedded' in a geometric space where distance has meaning." },
+      { term: "Encoder", says: "The input part", means: "In transformers, an encoder uses bidirectional self-attention so each position can attend to all positions. BERT is encoder-only. Good for understanding tasks (classification, NER) but not generation." },
+      { term: "Epoch", says: "One pass through the data", means: "One complete pass through every example in the training set. Multiple epochs = seeing the data multiple times. More epochs can improve learning but risks overfitting." },
+      { term: "Feature", says: "A column in your data", means: "An individual measurable property of the data. In classical ML, you engineer features by hand. In deep learning, the network learns features automatically from raw data." },
+      { term: "Few-Shot", says: "Give the AI some examples first", means: "Including a small number of input-output examples in the prompt before asking the model to perform a task. Typically 3-5 examples. The model pattern-matches on these examples to understand the desired format and behavior." },
+      { term: "Fine-tuning", says: "Training the AI on your data", means: "Starting with a pre-trained model's weights and continuing training on a smaller, task-specific dataset. Only updates existing weights, doesn't add new knowledge from scratch." },
+      { term: "Function Calling", says: "AI that can use tools", means: "A structured way for LLMs to request execution of external functions. You define tools with JSON Schema descriptions, the model outputs a structured JSON object specifying which function to call with what arguments, your code executes it, and the result goes back to the model." },
+      { term: "Guardrails", says: "Safety filters for AI", means: "Input/output validation layers around an LLM that detect and block harmful content, prompt injection attempts, PII leakage, or off-topic responses. Typically a pipeline: input filter → LLM → output filter." },
+      { term: "GPT", says: "ChatGPT or The AI", means: "Generative Pre-trained Transformer — a specific architecture that predicts the next token using a decoder-only transformer trained on large text corpora. Generative (produces text), Pre-trained (trained once on large data, then adapted), Transformer (the architecture)." },
+      { term: "GAN (Generative Adversarial Network)", says: "Two AIs fighting each other", means: "A generator network tries to create realistic data while a discriminator network tries to tell real from fake. They train together: the generator gets better at fooling the discriminator, and the discriminator gets better at detecting fakes." },
+      { term: "Gradient", says: "The slope", means: "A vector of partial derivatives pointing in the direction of steepest increase. In ML, you go opposite to the gradient (gradient descent) to minimize the loss." },
+      { term: "Gradient Descent", says: "How AI improves", means: "An optimization algorithm that adjusts parameters in the direction that reduces the loss function most steeply, like walking downhill in a high-dimensional landscape." },
+      { term: "Hyperparameter", says: "Settings you tune", means: "Values set before training that control the training process itself: learning rate, batch size, number of layers, dropout rate. Unlike model parameters (weights), these aren't learned from data." },
+      { term: "Hallucination", says: "The AI is lying", means: "The model generates plausible-sounding text that isn't grounded in its training data or the given context — it's pattern-completing, not fact-retrieving." },
+      { term: "Inference", says: "Running the AI", means: "Using a trained model to make predictions on new data. No weight updates happen. This is what you do in production: send input, get output." },
+      { term: "Inductive Bias", says: "Never heard of it", means: "The assumptions built into a model's architecture. CNNs assume local patterns matter. RNNs assume order matters. Transformers assume everything might relate to everything. The right bias helps the model learn faster from less data." },
+      { term: "JAX", says: "Google's ML framework", means: "A NumPy-compatible library that adds automatic differentiation (grad), JIT compilation (jit), automatic vectorization (vmap), and multi-device parallelism (pmap). Unlike PyTorch's object-oriented style, JAX is purely functional. Used by Google DeepMind for AlphaFold and Gemini." },
+      { term: "KV Cache", says: "Makes inference faster", means: "During autoregressive generation, caching the key and value matrices from previous tokens so you don't recompute them at each step. Trades memory for speed. Essential for fast LLM inference." },
+      { term: "Latent Space", says: "The hidden representation", means: "A compressed, learned representation space where similar inputs map to nearby points. Autoencoders, VAEs, and diffusion models all work in latent space. It's lower-dimensional than the input but captures the important structure." },
+      { term: "Learning Rate", says: "How fast the AI learns", means: "A scalar that controls step size during gradient descent. Too high: overshoots the minimum and diverges. Too low: converges too slowly or gets stuck. The single most important hyperparameter." },
+      { term: "LLM (Large Language Model)", says: "AI or the brain", means: "A transformer-based neural network trained to predict the next token in a sequence, with billions of parameters, trained on internet-scale text data." },
+      { term: "LoRA (Low-Rank Adaptation)", says: "Efficient fine-tuning", means: "Instead of updating all weights, insert small low-rank matrices alongside the original weights. Only these small matrices are trained, reducing memory by 10-100x." },
+      { term: "Loss Function", says: "How wrong the AI is", means: "A function that measures the gap between predicted and actual output. Training minimizes this function. MSE for regression, cross-entropy for classification, contrastive loss for embeddings. The choice of loss function defines what 'good' means to the model." },
+      { term: "Mixed Precision", says: "Training trick for speed", means: "Using float16 for forward pass and most operations (faster, less memory) but keeping float32 for gradient accumulation and weight updates (more precise). Gets 2x speedup with negligible accuracy loss." },
+      { term: "MoE (Mixture of Experts)", says: "Only part of the model runs", means: "A model with many 'expert' subnetworks where a routing mechanism sends each input to only a few experts. The full model is huge but each forward pass is cheap because most experts are skipped. Mixtral and GPT-4 use this." },
+      { term: "MCP (Model Context Protocol)", says: "A way for AI to use tools", means: "An open protocol (JSON-RPC over stdio/HTTP) that standardizes how AI applications connect to external data sources and tools, with typed schemas for tools, resources, and prompts." },
+      { term: "NaN (Not a Number)", says: "Training crashed", means: "A floating-point value indicating undefined results (0/0, inf-inf). In training, NaN loss usually means: learning rate too high, exploding gradients, log of zero, or division by zero." },
+      { term: "Normalization", says: "Scaling the data", means: "Adjusting values to a standard range. Batch normalization normalizes across a batch. Layer normalization normalizes across features. Both stabilize training and allow higher learning rates." },
+      { term: "Overfitting", says: "The model memorized the data", means: "The model performs well on training data but poorly on unseen data. It learned the noise, not the signal. Fix with: more data, regularization (dropout, weight decay), early stopping, data augmentation, simpler model." },
+      { term: "Optimizer", says: "The thing that updates weights", means: "An algorithm that uses gradients to update model parameters. SGD is the simplest. Adam is the most common. Each optimizer has different properties: convergence speed, memory usage, sensitivity to hyperparameters." },
+      { term: "Parameter", says: "Model size", means: "A learnable value in the model, typically a weight or bias. '7B parameters' means 7 billion learnable numbers. Each float32 parameter takes 4 bytes, so 7B parameters = 28GB of memory just for the weights." },
+      { term: "Perplexity", says: "How confused the model is", means: "The exponential of the average cross-entropy loss. Lower is better. A perplexity of 10 means the model is as uncertain as if it were choosing uniformly among 10 tokens at each step." },
+      { term: "Precision \u0026 Recall", says: "Accuracy metrics", means: "Precision = of items you flagged, how many were correct. Recall = of all correct items, how many did you find. They trade off. Use precision when false positives are costly, recall when false negatives are costly." },
+      { term: "Prompt Engineering", says: "Talking to AI the right way", means: "Designing the input text to reliably produce desired outputs — including system prompts, few-shot examples, format instructions, and chain-of-thought triggers." },
+      { term: "Prompt Injection", says: "Hacking the AI with words", means: "An attack where malicious text in the input overrides the system prompt or instructions. Direct injection: user types 'Ignore previous instructions.' Indirect injection: a retrieved document contains hidden instructions. No complete solution exists." },
+      { term: "QLoRA", says: "LoRA but cheaper", means: "Quantized LoRA. Keeps the frozen base model weights in 4-bit precision (NF4 format) while training LoRA adapters in 16-bit. Reduces memory by another 3-4x compared to standard LoRA." },
+      { term: "RAG (Retrieval-Augmented Generation)", says: "AI that can search", means: "A pattern where you retrieve relevant documents from a knowledge base (using embedding similarity), stuff them into the prompt, and let the LLM answer based on that context. Retrieval + Augmented + Generation." },
+      { term: "RLHF (Reinforcement Learning from Human Feedback)", says: "How they make AI helpful", means: "A training pipeline: (1) collect human preferences on model outputs, (2) train a reward model on those preferences, (3) use PPO to optimize the LLM to produce higher-reward outputs." },
+      { term: "Quantization", says: "Making the model smaller", means: "Reducing the precision of model weights from float32 (4 bytes) to int8 (1 byte) or int4 (0.5 bytes). Trades a small amount of accuracy for 4-8x less memory and faster inference. GPTQ, AWQ, and GGUF are common formats." },
+      { term: "ReLU", says: "Activation function", means: "Rectified Linear Unit: f(x) = max(0, x). The simplest non-linear activation. Fast to compute, doesn't saturate for positive values. Used everywhere because it works and is cheap." },
+      { term: "ROUGE", says: "Summarization metric", means: "Recall-Oriented Understudy for Gisting Evaluation. Measures overlap between generated text and reference text. ROUGE-1 counts unigram matches, ROUGE-2 counts bigram matches. Cheap to compute but only measures surface similarity." },
+      { term: "Semantic Search", says: "Smart search that understands meaning", means: "Finding documents by meaning rather than keyword matching. Embed the query and all documents into the same vector space, then return documents whose embeddings are closest to the query embedding. 'Payment failed' finds 'transaction declined' even though they share no words." },
+      { term: "Streaming", says: "Seeing the response appear word by word", means: "The LLM sends tokens as they are generated rather than waiting for the complete response. Uses Server-Sent Events (SSE) or WebSocket protocols. Reduces perceived latency from seconds to milliseconds." },
+      { term: "Self-Attention", says: "How the model decides what to focus on", means: "Each token computes query, key, and value vectors. Attention weight between two tokens = dot product of their query and key, scaled and softmaxed. Output = weighted sum of value vectors. Lets every token see every other token." },
+      { term: "SFT (Supervised Fine-Tuning)", says: "Teaching the model to follow instructions", means: "Fine-tuning a pre-trained model on (instruction, response) pairs. The model learns to generate the response given the instruction. This is what turns a base model into a chat model." },
+      { term: "Softmax", says: "Turns numbers into probabilities", means: "softmax(x_i) = exp(x_i) / sum(exp(x_j)). Transforms a vector of arbitrary real numbers into a probability distribution (all positive, sums to 1). Used in classification heads, attention weights, and anywhere you need probabilities." },
+      { term: "Swarm", says: "A bunch of AI agents working together like bees", means: "Multiple agents sharing state and coordinating through message passing, with emergent behavior arising from simple individual rules rather than central control." },
+      { term: "System Prompt", says: "The AI's instructions", means: "A special message at the start of a conversation that sets the model's behavior, persona, and constraints. Processed before user messages. Defines what the model should and shouldn't do, its tone, format preferences, and domain focus." },
+      { term: "Tensor", says: "A multi-dimensional array", means: "The fundamental data structure in deep learning frameworks. A 0D tensor is a scalar, 1D is a vector, 2D is a matrix, 3D+ is a tensor. In PyTorch and JAX, tensors track their computation history for automatic differentiation and can live on CPU or GPU." },
+      { term: "Token", says: "A word", means: "A subword unit (typically 3-4 characters in English) produced by a tokenizer like BPE. 'unbelievable' might be 3 tokens: 'un' + 'believ' + 'able'." },
+      { term: "Temperature", says: "Creativity setting", means: "A scalar that divides logits before softmax. Temperature=1 is default. Higher = flatter distribution = more random outputs. Lower = sharper distribution = more deterministic. Temperature=0 is argmax (always pick the most likely token)." },
+      { term: "Transfer Learning", says: "Using a pre-trained model", means: "Taking a model trained on one task and adapting it to a different task. The early layers learn general features (edges, syntax patterns) that transfer. Only the later layers need task-specific training. This is why you can fine-tune BERT for any NLP task." },
+      { term: "Transformer", says: "The architecture behind modern AI", means: "A neural network architecture that processes sequences using self-attention (letting every position attend to every other position) instead of recurrence, enabling massive parallelization." },
+      { term: "Underfitting", says: "The model isn't learning", means: "The model is too simple to capture the patterns in the data. Training loss stays high. Fix with: more parameters, more layers, longer training, lower regularization, better features." },
+      { term: "VAE (Variational Autoencoder)", says: "A generative model", means: "An autoencoder that learns a smooth latent space by forcing the encoder output to follow a Gaussian distribution. You can sample from this distribution and decode to generate new data." },
+      { term: "Vector Database", says: "A special database for AI", means: "A database optimized for storing vectors (dense arrays of floats) and performing fast approximate nearest-neighbor search. The core operation in similarity search, RAG, and recommendation systems." },
+      { term: "Weight", says: "What the model learned", means: "A single number in a model's parameter matrix. A linear layer with input size 768 and output size 3072 has 768*3072 = 2,359,296 weights. Training adjusts each weight to minimize the loss function." },
+      { term: "Weight Decay", says: "Regularization", means: "Adding a penalty proportional to the magnitude of weights to the loss function. Equivalent to L2 regularization. Prevents weights from growing too large. Typical value: 0.01-0.1." },
+      { term: "Zero-Shot", says: "No training needed", means: "Using a model on a task it wasn't explicitly trained for, with no task-specific examples in the prompt. The model generalizes from pre-training. Works because large models have seen enough variety to handle new task formats." }
+    ];
+
+    function getFirstLetter(str) {
+      return str.charAt(0).toUpperCase();
+    }
+
+    function groupByLetter(terms) {
+      const groups = {};
+      terms.forEach(item => {
+        const letter = getFirstLetter(item.term);
+        if (!groups[letter]) groups[letter] = [];
+        groups[letter].push(item);
+      });
+      return groups;
+    }
+
+    function renderGlossary(filtered) {
+      const content = document.getElementById('glossaryContent');
+      const count = document.getElementById('glossaryCount');
+      const noResults = document.getElementById('noResults');
+      
+      if (filtered.length === 0) {
+        content.innerHTML = '';
+        count.textContent = '';
+        noResults.style.display = 'block';
+        return;
+      }
+      
+      noResults.style.display = 'none';
+      count.textContent = filtered.length + ' term' + (filtered.length !== 1 ? 's' : '');
+      
+      const groups = groupByLetter(filtered);
+      const sortedLetters = Object.keys(groups).sort();
+      
+      let html = '';
+      sortedLetters.forEach(letter => {
+        html += '<div class="glossary-section" id="section-' + letter + '">';
+        html += '<h2>' + letter + '</h2>';
+        groups[letter].forEach(item => {
+          html += '<div class="glossary-item">';
+          html += '<h3>' + item.term + '</h3>';
+          html += '<div class="glossary-says">"' + item.says + '" — What people say</div>';
+          html += '<div class="glossary-means">' + item.means + '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      });
+      
+      content.innerHTML = html;
+    }
+
+    function renderAlphaNav(activeLetter) {
+      const nav = document.getElementById('alphaNav');
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const groups = groupByLetter(GLOSSARY);
+      
+      let html = '';
+      letters.forEach(letter => {
+        const hasTerms = groups[letter] !== undefined;
+        const active = letter === activeLetter ? 'active' : '';
+        const empty = !hasTerms ? 'empty' : '';
+        html += '<button class="glossary-alpha-btn ' + active + ' ' + empty + '" data-letter="' + letter + '"' + (hasTerms ? '' : ' disabled') + '>' + letter + '</button>';
+      });
+      nav.innerHTML = html;
+      
+      nav.querySelectorAll('.glossary-alpha-btn:not(.empty)').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const letter = this.getAttribute('data-letter');
+          const section = document.getElementById('section-' + letter);
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+            renderAlphaNav(letter);
+          }
+        });
+      });
+    }
+
+    // Search functionality
+    document.getElementById('glossarySearch').addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      const filtered = query ? GLOSSARY.filter(item => 
+        item.term.toLowerCase().includes(query) ||
+        item.means.toLowerCase().includes(query) ||
+        item.says.toLowerCase().includes(query)
+      ) : GLOSSARY;
+      renderGlossary(filtered);
+    });
+
+    // Initial render
+    renderGlossary(GLOSSARY);
+    renderAlphaNav();
+  </script>
+</body>
+</html>
