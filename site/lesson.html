@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson — AI Systems Engineering in Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Lesson Page Layout ───────────────── */
+    .lesson-page {
+      display: flex;
+      min-height: 100vh;
+      padding-top: 64px;
+    }
+
+    /* ── Sidebar ─────────────────────────────── */
+    .lesson-sidebar {
+      width: 320px;
+      flex-shrink: 0;
+      background: var(--bg-soft);
+      border-right: 1px solid var(--ink-faint);
+      overflow-y: auto;
+      position: fixed;
+      top: 64px;
+      bottom: 0;
+      left: 0;
+      z-index: 50;
+      transition: transform var(--transition-base);
+    }
+    .lesson-sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 60;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gradient-title);
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-fast);
+    }
+    .sidebar-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .sidebar-header {
+      padding: 20px 20px 12px;
+      border-bottom: 1px solid var(--ink-faint);
+      position: sticky;
+      top: 0;
+      background: var(--bg-soft);
+      z-index: 2;
+    }
+    .sidebar-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .sidebar-progress {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-mute);
+    }
+    .sidebar-progress-bar {
+      height: 4px;
+      background: var(--ink-faint);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .sidebar-progress-fill {
+      height: 100%;
+      background: var(--gradient-title);
+      border-radius: 2px;
+      transition: width var(--transition-slow);
+    }
+
+    .phase-nav {
+      padding: 8px 0;
+    }
+    .phase-nav-item {
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    [data-theme="dark"] .phase-nav-item {
+      border-bottom-color: rgba(255,255,255,0.04);
+    }
+    .phase-nav-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+      position: relative;
+    }
+    .phase-nav-header:hover {
+      background: rgba(0,0,0,0.03);
+    }
+    [data-theme="dark"] .phase-nav-header:hover {
+      background: rgba(255,255,255,0.03);
+    }
+    .phase-nav-chevron {
+      font-size: 0.75rem;
+      color: var(--ink-mute);
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .phase-nav-item.open .phase-nav-chevron {
+      transform: rotate(90deg);
+    }
+    .phase-nav-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--ink-mute);
+      min-width: 28px;
+    }
+    .phase-nav-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .phase-nav-item.active .phase-nav-name {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    .phase-nav-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .phase-nav-status.complete { background: var(--accent-emerald); }
+    .phase-nav-status.in-progress { background: var(--accent-amber); }
+    .phase-nav-status.planned { background: transparent; border: 1.5px dashed var(--ink-faint); }
+
+    .phase-nav-lessons {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-base);
+    }
+    .phase-nav-item.open .phase-nav-lessons {
+      max-height: 600px;
+    }
+    .phase-nav-lesson {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px 9px 52px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      color: var(--ink-mute);
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+    .phase-nav-lesson:hover {
+      background: rgba(0,0,0,0.03);
+      color: var(--ink);
+    }
+    [data-theme="dark"] .phase-nav-lesson:hover {
+      background: rgba(255,255,255,0.03);
+    }
+    .phase-nav-lesson.active {
+      background: rgba(79,125,255,0.08);
+      color: var(--accent-blue);
+      border-left-color: var(--accent-blue);
+      font-weight: 500;
+    }
+    .phase-nav-lesson .lesson-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--ink-faint);
+    }
+    .phase-nav-lesson.complete .lesson-dot {
+      background: var(--accent-emerald);
+    }
+    .phase-nav-lesson .lesson-type {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--ink-faint);
+      color: var(--ink-mute);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .phase-nav-lesson .lesson-type[data-type="Build"] { color: var(--accent-blue); border-color: var(--accent-blue); }
+    .phase-nav-lesson .lesson-type[data-type="Capstone"] { color: var(--accent-coral); border-color: var(--accent-coral); }
+
+    /* ── Main Content ──────────────────────── */
+    .lesson-main {
+      flex: 1;
+      margin-left: 320px;
+      min-height: calc(100vh - 64px);
+    }
+    .lesson-content-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    /* Breadcrumb */
+    .lesson-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-mute);
+    }
+    .lesson-breadcrumb a {
+      color: var(--ink-mute);
+      text-decoration: none;
+      border-bottom: none;
+      transition: color var(--transition-fast);
+    }
+    .lesson-breadcrumb a:hover {
+      color: var(--accent-blue);
+    }
+    .lesson-breadcrumb .bc-sep {
+      opacity: 0.5;
+    }
+
+    /* Lesson Header */
+    .lesson-header {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .lesson-phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(79,125,255,0.1);
+      border: 1px solid rgba(79,125,255,0.2);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .lesson-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+    .lesson-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .lesson-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-mute);
+    }
+    .lesson-meta-tag {
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .lesson-meta-tag[data-type="Build"] { background: rgba(79,125,255,0.1); color: var(--accent-blue); }
+    .lesson-meta-tag[data-type="Learn"] { background: rgba(200,200,208,0.2); color: var(--ink-mute); }
+    .lesson-meta-tag[data-type="Capstone"] { background: rgba(255,107,107,0.1); color: var(--accent-coral); }
+
+    /* Lesson Body (Markdown-style) */
+    .lesson-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+    .lesson-body h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 48px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--ink-faint);
+    }
+    .lesson-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 32px 0 14px;
+    }
+    .lesson-body p {
+      margin-bottom: 18px;
+    }
+    .lesson-body ul, .lesson-body ol {
+      margin: 0 0 18px 24px;
+      padding: 0;
+    }
+    .lesson-body li {
+      margin-bottom: 8px;
+    }
+    .lesson-body code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--bg-code);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-coral);
+    }
+    .lesson-body pre {
+      background: var(--bg-code);
+      border: 1px solid var(--ink-faint);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    .lesson-body pre code {
+      background: none;
+      padding: 0;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .lesson-body blockquote {
+      margin: 24px 0;
+      padding: 16px 24px;
+      background: rgba(79,125,255,0.06);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+    .lesson-body .callout {
+      margin: 24px 0;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--ink-faint);
+      background: var(--bg-elevated);
+    }
+    .lesson-body .callout-tip {
+      border-color: var(--accent-emerald);
+      background: rgba(46,204,113,0.06);
+    }
+    .lesson-body .callout-warning {
+      border-color: var(--accent-amber);
+      background: rgba(243,156,18,0.06);
+    }
+    .lesson-body .callout-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lesson-body .callout-tip .callout-title { color: var(--accent-emerald); }
+    .lesson-body .callout-warning .callout-title { color: var(--accent-amber); }
+    .lesson-body img {
+      max-width: 100%;
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+    }
+    .lesson-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    .lesson-body th, .lesson-body td {
+      padding: 12px 16px;
+      border: 1px solid var(--ink-faint);
+      text-align: left;
+    }
+    .lesson-body th {
+      background: var(--bg-code);
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── Code Runner (Pyodide) ─────────────── */
+    .code-runner-section {
+      margin: 48px 0;
+      border: 1.5px solid var(--ink-faint);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-elevated);
+    }
+    .code-runner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: var(--bg-code);
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .code-runner-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-runner-title .lang-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      background: var(--accent-blue);
+      color: white;
+      border-radius: 4px;
+    }
+    .code-runner-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .code-runner-btn {
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--ink-faint);
+      background: var(--bg-elevated);
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .code-runner-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .code-runner-btn.primary {
+      background: var(--gradient-title);
+      color: white;
+      border: none;
+    }
+    .code-runner-btn.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+    }
+    .code-runner-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .code-editor {
+      width: 100%;
+      min-height: 200px;
+      max-height: 400px;
+      padding: 20px 24px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--bg-code);
+      border: none;
+      outline: none;
+      resize: vertical;
+      tab-size: 4;
+    }
+    .code-output {
+      padding: 16px 24px;
+      background: #0f0f1a;
+      color: #e8e8f0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      min-height: 80px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .code-output:empty::before {
+      content: 'Output will appear here...';
+      color: var(--ink-mute);
+      opacity: 0.5;
+    }
+    .code-output .output-error {
+      color: var(--accent-coral);
+    }
+    .code-output .output-success {
+      color: var(--accent-emerald);
+    }
+    .code-output .output-info {
+      color: var(--accent-blue);
+    }
+    .code-runner-status {
+      padding: 8px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-mute);
+      background: var(--bg-code);
+      border-top: 1px solid var(--ink-faint);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-runner-status .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .code-runner-status.ready .status-dot {
+      background: var(--accent-emerald);
+      animation: none;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Quiz Section ──────────────────────── */
+    .lesson-quiz-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 2px solid var(--ink-faint);
+    }
+    .lesson-quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .lesson-quiz-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── Lesson Navigation ─────────────────── */
+    .lesson-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--ink-faint);
+      gap: 16px;
+    }
+    .lesson-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--ink-faint);
+      border-radius: var(--radius-md);
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.92rem;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      flex: 1;
+    }
+    .lesson-nav-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .lesson-nav-btn.prev {
+      justify-content: flex-start;
+    }
+    .lesson-nav-btn.next {
+      justify-content: flex-end;
+      background: var(--gradient-title);
+      color: white;
+      border: none;
+    }
+    .lesson-nav-btn.next:hover {
+      color: white;
+      box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+    }
+    .lesson-nav-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .lesson-nav-btn .nav-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+    }
+    .lesson-nav-btn .nav-title {
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .lesson-nav-btn.next .nav-title {
+      color: white;
+    }
+
+    /* ── Mark Complete Button ──────────────── */
+    .mark-complete-bar {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0 20px;
+    }
+    .mark-complete-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: var(--bg-elevated);
+      border: 2px solid var(--ink-faint);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .mark-complete-btn:hover {
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+    .mark-complete-btn.done {
+      background: rgba(46,204,113,0.1);
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+
+    /* ── Responsive ────────────────────────── */
+    @media (max-width: 1024px) {
+      .lesson-sidebar {
+        transform: translateX(-100%);
+      }
+      .lesson-sidebar.open {
+        transform: translateX(0);
+      }
+      .lesson-main {
+        margin-left: 0;
+      }
+      .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .lesson-sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 49;
+      }
+      .lesson-sidebar-overlay.open {
+        display: block;
+      }
+    }
+    @media (max-width: 768px) {
+      .lesson-content-wrapper {
+        padding: 24px 20px 60px;
+      }
+      .lesson-title {
+        font-size: 1.4rem;
+      }
+      .lesson-nav-bar {
+        flex-direction: column;
+      }
+      .lesson-nav-btn {
+        width: 100%;
+        justify-content: center !important;
+      }
+      .code-editor {
+        min-height: 150px;
+        padding: 14px 16px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Home">
+        <span class="logo-icon">🤖</span>
+        <span class="logo-text">AI Systems <span class="logo-accent">Engineering</span></span>
+      </a>
+      <nav class="header-nav" id="headerNav" aria-label="Main">
+        <a href="index.html#curriculum">Curriculum</a>
+        <a href="index.html#about">About</a>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="search-toggle" id="cmdPaletteBtn" data-cmd-palette aria-label="Search">
+          <span>🔍</span>
+        </button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+        </button>
+        <a href="https://github.com/salihtutun/ai-systems-engineering-in-business" target="_blank" class="header-github" aria-label="GitHub">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="lesson-sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar Toggle (mobile) -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">☰</button>
+
+  <!-- Lesson Page -->
+  <div class="lesson-page">
+    <!-- Sidebar -->
+    <aside class="lesson-sidebar" id="lessonSidebar" aria-label="Lesson navigation">
+      <div class="sidebar-header">
+        <div class="sidebar-title">📚 Curriculum</div>
+        <div class="sidebar-progress" id="sidebarProgressText">0 / 0 lessons</div>
+        <div class="sidebar-progress-bar">
+          <div class="sidebar-progress-fill" id="sidebarProgressFill" style="width:0%"></div>
+        </div>
+      </div>
+      <nav class="phase-nav" id="phaseNav" aria-label="Phases"></nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lesson-main" id="main">
+      <div class="lesson-content-wrapper">
+        <!-- Breadcrumb -->
+        <nav class="lesson-breadcrumb" id="lessonBreadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="bc-sep">›</span>
+          <a href="index.html#curriculum">Curriculum</a>
+          <span class="bc-sep">›</span>
+          <span id="bcPhase">Phase</span>
+          <span class="bc-sep">›</span>
+          <span id="bcLesson">Lesson</span>
+        </nav>
+
+        <!-- Lesson Header -->
+        <header class="lesson-header">
+          <div class="lesson-phase-badge" id="lessonPhaseBadge">Phase 00</div>
+          <h1 class="lesson-title" id="lessonTitle">Loading lesson...</h1>
+          <div class="lesson-meta" id="lessonMeta">
+            <span class="lesson-meta-item">⏱ <span id="lessonDuration">~15 min</span></span>
+            <span class="lesson-meta-item">
+              <span class="lesson-meta-tag" id="lessonTypeTag" data-type="Learn">Learn</span>
+            </span>
+            <span class="lesson-meta-item">🔤 <span id="lessonLang">Python</span></span>
+          </div>
+        </header>
+
+        <!-- Lesson Body -->
+        <article class="lesson-body" id="lessonBody">
+          <p>Loading lesson content...</p>
+        </article>
+
+        <!-- Mark Complete -->
+        <div class="mark-complete-bar">
+          <button class="mark-complete-btn" id="markCompleteBtn">
+            <span id="markCompleteIcon">✓</span>
+            <span id="markCompleteText">Mark as Complete</span>
+          </button>
+        </div>
+
+        <!-- Code Runner -->
+        <section class="code-runner-section" id="codeRunnerSection" style="display:none;">
+          <div class="code-runner-header">
+            <div class="code-runner-title">
+              <span>🐍</span>
+              <span>Try it yourself</span>
+              <span class="lang-badge">Python</span>
+            </div>
+            <div class="code-runner-actions">
+              <button class="code-runner-btn" id="codeResetBtn" title="Reset code">↺ Reset</button>
+              <button class="code-runner-btn primary" id="codeRunBtn">▶ Run</button>
+            </div>
+          </div>
+          <textarea class="code-editor" id="codeEditor" spellcheck="false" placeholder="# Type your Python code here...
+# Press Run to execute with Pyodide (WASM Python)
+
+print('Hello, AI Engineer!')
+"></textarea>
+          <div class="code-output" id="codeOutput"></div>
+          <div class="code-runner-status" id="codeStatus">
+            <span class="status-dot"></span>
+            <span id="codeStatusText">Initializing Python runtime...</span>
+          </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="lesson-quiz-section" id="lessonQuizSection">
+          <div class="lesson-quiz-header">
+            <h2 class="lesson-quiz-title">🧠 Quiz</h2>
+            <span class="lesson-meta-item" id="quizProgressText">Question 1 of 3</span>
+          </div>
+          <div id="lessonQuizContent"></div>
+        </section>
+
+        <!-- Lesson Navigation -->
+        <nav class="lesson-nav-bar" aria-label="Lesson navigation">
+          <a href="#" class="lesson-nav-btn prev disabled" id="navPrev">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+              <span class="nav-label">← Previous</span>
+              <span class="nav-title" id="navPrevTitle">—</span>
+            </div>
+          </a>
+          <a href="#" class="lesson-nav-btn next disabled" id="navNext">
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+              <span class="nav-label">Next →</span>
+              <span class="nav-title" id="navNextTitle">—</span>
+            </div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span id="toastMessage">Done!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <script>
+    // ── Pyodide Code Runner ─────────────────
+    let pyodide = null;
+    let pyodideReady = false;
+    const defaultCode = `# Welcome to the interactive Python runner!
+# This runs in your browser using Pyodide (WASM Python).
+
+import numpy as np
+
+# Basic math
+print("2 + 3 =", 2 + 3)
+print("sqrt(16) =", np.sqrt(16))
+
+# Create a simple array
+arr = np.array([1, 2, 3, 4, 5])
+print("Array:", arr)
+print("Mean:", np.mean(arr))
+print("Std:", np.std(arr))
+
+# Simple ML: simulate linear regression
+X = np.array([1, 2, 3, 4, 5])
+y = 2 * X + 1 + np.random.normal(0, 0.5, len(X))
+print("\\nLinear regression data:")
+print("X:", X)
+print("y:", y)
+`;
+
+    async function initPyodide() {
+      const statusText = document.getElementById('codeStatusText');
+      const statusDot = document.querySelector('.code-runner-status .status-dot');
+      try {
+        pyodide = await loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+        });
+        await pyodide.loadPackage("numpy");
+        await pyodide.loadPackage("micropip");
+        pyodideReady = true;
+        if (statusText) statusText.textContent = 'Python ready! NumPy loaded.';
+        const statusEl = document.getElementById('codeStatus');
+        if (statusEl) statusEl.classList.add('ready');
+      } catch (err) {
+        if (statusText) statusText.textContent = 'Failed to load Python: ' + err.message;
+        console.error('Pyodide init error:', err);
+      }
+    }
+
+    function runPythonCode() {
+      const output = document.getElementById('codeOutput');
+      const editor = document.getElementById('codeEditor');
+      const runBtn = document.getElementById('codeRunBtn');
+      if (!pyodideReady || !pyodide) {
+        output.innerHTML = '<span class="output-error">Python runtime not ready yet. Please wait a moment and try again.</span>';
+        return;
+      }
+      const code = editor.value;
+      output.innerHTML = '';
+      runBtn.disabled = true;
+      runBtn.textContent = '⏳ Running...';
+
+      // Capture stdout
+      let captured = '';
+      pyodide.setStdout({ batched: (text) => { captured += text; } });
+      pyodide.setStderr({ batched: (text) => { captured += text; } });
+
+      setTimeout(async () => {
+        try {
+          await pyodide.runPythonAsync(code);
+          if (!captured.trim()) {
+            captured = '(No output)';
+          }
+          output.innerHTML = escapeHtml(captured);
+        } catch (err) {
+          output.innerHTML = '<span class="output-error">' + escapeHtml(String(err)) + '</span>';
+        } finally {
+          runBtn.disabled = false;
+          runBtn.textContent = '▶ Run';
+        }
+      }, 50);
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const editor = document.getElementById('codeEditor');
+      const runBtn = document.getElementById('codeRunBtn');
+      const resetBtn = document.getElementById('codeResetBtn');
+      if (editor) editor.value = defaultCode;
+      if (runBtn) runBtn.addEventListener('click', runPythonCode);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (editor) editor.value = defaultCode;
+          const output = document.getElementById('codeOutput');
+          if (output) output.innerHTML = '';
+        });
+      }
+      // Support Tab in textarea
+      if (editor) {
+        editor.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+            editor.selectionStart = editor.selectionEnd = start + 4;
+          }
+        });
+      }
+      // Initialize Pyodide
+      initPyodide();
+    });
+  </script>
+
+  <!-- Lesson Page Logic -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Parse URL params: ?phase=0&lesson=0
+      function getLessonParams() {
+        const params = new URLSearchParams(window.location.search);
+        const phaseIdx = parseInt(params.get('phase'), 10);
+        const lessonIdx = parseInt(params.get('lesson'), 10);
+        if (isNaN(phaseIdx) || isNaN(lessonIdx)) return null;
+        return { phaseIdx, lessonIdx };
+      }
+
+      function getLessonLocation(phaseIdx, lessonIdx) {
+        const phase = PHASES[phaseIdx];
+        if (!phase) return null;
+        const lesson = phase.lessons[lessonIdx];
+        if (!lesson) return null;
+        return { phase, lesson };
+      }
+
+      function getGlobalLessonIndex(phaseIdx, lessonIdx) {
+        let idx = 0;
+        for (let p = 0; p < phaseIdx; p++) {
+          idx += PHASES[p].lessons.length;
+        }
+        idx += lessonIdx;
+        return idx;
+      }
+
+      function getLessonByGlobalIndex(globalIdx) {
+        let count = 0;
+        for (let p = 0; p < PHASES.length; p++) {
+          for (let l = 0; l < PHASES[p].lessons.length; l++) {
+            if (count === globalIdx) return { phaseIdx: p, lessonIdx: l, phase: PHASES[p], lesson: PHASES[p].lessons[l] };
+            count++;
+          }
+        }
+        return null;
+      }
+
+      function getTotalLessons() {
+        return PHASES.reduce((sum, p) => sum + p.lessons.length, 0);
+      }
+
+      // Render sidebar
+      function renderSidebar(activePhaseIdx, activeLessonIdx) {
+        const nav = document.getElementById('phaseNav');
+        if (!nav) return;
+        let html = '';
+        PHASES.forEach((phase, pIdx) => {
+          const isActivePhase = pIdx === activePhaseIdx;
+          const totalDone = phase.lessons.filter((_, i) => Progress.isLessonComplete(phase.id, i)).length;
+          const allDone = totalDone === phase.lessons.length;
+          const phaseStatus = allDone ? 'complete' : totalDone > 0 ? 'in-progress' : 'planned';
+          html += `
+            <div class="phase-nav-item ${isActivePhase ? 'open' : ''}" data-phase="${pIdx}">
+              <div class="phase-nav-header" onclick="togglePhaseNav(${pIdx})">
+                <span class="phase-nav-chevron">▶</span>
+                <span class="phase-nav-num">${String(phase.id).padStart(2,'0')}</span>
+                <span class="phase-nav-name">${escapeHtml(phase.name)}</span>
+                <span class="phase-nav-status ${phaseStatus}"></span>
+              </div>
+              <div class="phase-nav-lessons">`;
+          phase.lessons.forEach((lesson, lIdx) => {
+            const isActive = pIdx === activePhaseIdx && lIdx === activeLessonIdx;
+            const isComplete = Progress.isLessonComplete(phase.id, lIdx) || lesson.status === 'complete';
+            html += `
+              <a href="lesson.html?phase=${pIdx}&lesson=${lIdx}" class="phase-nav-lesson ${isActive ? 'active' : ''} ${isComplete ? 'complete' : ''}">
+                <span class="lesson-dot"></span>
+                <span>${escapeHtml(lesson.name)}</span>
+                <span class="lesson-type" data-type="${lesson.type}">${lesson.type}</span>
+              </a>`;
+          });
+          html += `</div></div>`;
+        });
+        nav.innerHTML = html;
+
+        // Update sidebar progress
+        const stats = Progress.getStats();
+        const pct = stats.lessons > 0 ? Math.round((stats.complete / stats.lessons) * 100) : 0;
+        const progText = document.getElementById('sidebarProgressText');
+        const progFill = document.getElementById('sidebarProgressFill');
+        if (progText) progText.textContent = `${stats.complete} / ${stats.lessons} lessons (${pct}%)`;
+        if (progFill) progFill.style.width = pct + '%';
+      }
+
+      window.togglePhaseNav = function(pIdx) {
+        const items = document.querySelectorAll('.phase-nav-item');
+        items.forEach((item, i) => {
+          if (i === pIdx) item.classList.toggle('open');
+        });
+      };
+
+      // Generate demo lesson content based on lesson type
+      function generateLessonContent(phase, lesson) {
+        const isCodeLesson = lesson.lang === 'Python' || lesson.lang === 'Shell';
+        let content = '';
+
+        content += `<p><strong>${escapeHtml(lesson.summary)}</strong></p>`;
+        content += `<p>In this lesson, we explore ${escapeHtml(lesson.name.toLowerCase())} and how it applies to real-world business scenarios. Understanding these concepts is essential for building AI systems that deliver measurable value.</p>`;
+
+        content += `<h2>Key Concepts</h2>`;
+        content += `<ul>`;
+        content += `<li>Understanding the fundamentals of ${escapeHtml(lesson.name)}</li>`;
+        content += `<li>Business applications and ROI considerations</li>`;
+        content += `<li>Implementation best practices and common pitfalls</li>`;
+        content += `<li>Integration with existing systems and workflows</li>`;
+        content += `</ul>`;
+
+        if (isCodeLesson) {
+          content += `<h2>Hands-On Example</h2>`;
+          content += `<p>Let's look at a practical implementation. The code below demonstrates the core concepts:</p>`;
+          content += `<pre><code># Example: ${escapeHtml(lesson.name)}
+import numpy as np
+
+# Generate sample data
+data = np.random.randn(100)
+print(f"Mean: {np.mean(data):.4f}")
+print(f"Std:  {np.std(data):.4f}")
+
+# Basic analysis
+print(f"Min:  {np.min(data):.4f}")
+print(f"Max:  {np.max(data):.4f}")
+</code></pre>`;
+          content += `<div class="callout callout-tip">
+            <div class="callout-title">💡 Try It Yourself</div>
+            <p>Use the interactive code runner below to experiment with the code. You can modify it and see the results instantly!</p>
+          </div>`;
+        }
+
+        content += `<h2>Business Impact</h2>`;
+        content += `<p>Organizations that effectively implement ${escapeHtml(lesson.name.toLowerCase())} typically see:</p>`;
+        content += `<ul>`;
+        content += `<li><strong>15-30%</strong> improvement in relevant KPIs</li>`;
+        content += `<li>Reduced manual effort and operational costs</li>`;
+        content += `<li>Improved decision-making speed and accuracy</li>`;
+        content += `<li>Competitive advantages in market positioning</li>`;
+        content += `</ul>`;
+
+        content += `<div class="callout callout-warning">
+          <div class="callout-title">⚠️ Common Pitfall</div>
+          <p>Don't skip the data quality assessment. Even the most sophisticated models fail with poor input data. Always validate your assumptions about data distribution and completeness.</p>
+        </div>`;
+
+        content += `<h2>Summary</h2>`;
+        content += `<p>${escapeHtml(lesson.name)} is a foundational skill for AI systems engineers. By mastering these concepts, you'll be better equipped to build solutions that create real business value.</p>`;
+        content += `<blockquote>"The best AI systems are those that solve real business problems, not those with the most complex algorithms."</blockquote>`;
+
+        return content;
+      }
+
+      // Generate quiz for a lesson
+      function generateLessonQuiz(phase, lesson) {
+        // Use a deterministic "random" based on lesson name to pick questions
+        const seed = lesson.name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+        const available = QUIZZES.length;
+        const startIdx = seed % available;
+        const questions = [];
+        for (let i = 0; i < 3; i++) {
+          questions.push(QUIZZES[(startIdx + i) % available]);
+        }
+        return questions;
+      }
+
+      // Render lesson quiz
+      function renderLessonQuiz(questions, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        let current = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+          if (current >= questions.length) {
+            const pct = Math.round((score / questions.length) * 100);
+            container.innerHTML = `
+              <div style="text-align:center;padding:32px 0;">
+                <div style="font-size:3rem;margin-bottom:12px;">${pct >= 70 ? '🎉' : pct >= 50 ? '👍' : '💪'}</div>
+                <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:8px;">Quiz Complete!</h3>
+                <p style="color:var(--ink-soft);margin-bottom:20px;">You scored ${score} out of ${questions.length} (${pct}%)</p>
+                <button class="btn btn-primary" onclick="window.location.reload()">↻ Retake Quiz</button>
+              </div>`;
+            document.getElementById('quizProgressText').textContent = 'Complete!';
+            return;
+          }
+          const q = questions[current];
+          const pct = ((current + 1) / questions.length) * 100;
+          document.getElementById('quizProgressText').textContent = `Question ${current + 1} of ${questions.length}`;
+
+          let html = `
+            <div class="quiz-question">${escapeHtml(q.question)}</div>
+            <div class="quiz-feedback" id="lqFeedback"></div>
+            <div class="quiz-options">`;
+          q.options.forEach((opt, i) => {
+            html += `
+              <button class="quiz-option" data-index="${i}">
+                <span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span>
+                <span>${escapeHtml(opt)}</span>
+              </button>`;
+          });
+          html += `</div>
+            <div class="quiz-nav">
+              <button class="quiz-nav-btn" id="lqPrev" ${current === 0 ? 'disabled' : ''}>Previous</button>
+              <button class="quiz-nav-btn primary" id="lqNext" disabled>Next</button>
+            </div>`;
+          container.innerHTML = html;
+          answered = false;
+
+          container.querySelectorAll('.quiz-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+              if (answered) return;
+              const idx = parseInt(btn.getAttribute('data-index'), 10);
+              const correct = idx === q.correct;
+              answered = true;
+              container.querySelectorAll('.quiz-option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                else if (i === idx && !correct) opt.classList.add('wrong');
+              });
+              const feedback = document.getElementById('lqFeedback');
+              feedback.className = 'quiz-feedback show ' + (correct ? 'correct' : 'wrong');
+              feedback.textContent = (correct ? '✅ Correct! ' : '❌ Not quite. ') + q.explanation;
+              if (correct) score++;
+              document.getElementById('lqNext').disabled = false;
+              document.getElementById('lqNext').textContent = current === questions.length - 1 ? 'See Results' : 'Next';
+            });
+          });
+
+          document.getElementById('lqPrev').addEventListener('click', () => {
+            if (current > 0) { current--; render(); }
+          });
+          document.getElementById('lqNext').addEventListener('click', () => {
+            current++;
+            render();
+          });
+        }
+        render();
+      }
+
+      // Main initialization
+      function initLessonPage() {
+        const params = getLessonParams();
+        if (!params) {
+          document.getElementById('lessonBody').innerHTML = '<p style="color:var(--accent-coral)">Invalid lesson URL. Please select a lesson from the <a href="index.html#curriculum">curriculum</a>.</p>';
+          return;
+        }
+
+        const { phaseIdx, lessonIdx } = params;
+        const loc = getLessonLocation(phaseIdx, lessonIdx);
+        if (!loc) {
+          document.getElementById('lessonBody').innerHTML = '<p style="color:var(--accent-coral)">Lesson not found. Please select a lesson from the <a href="index.html#curriculum">curriculum</a>.</p>';
+          return;
+        }
+        const { phase, lesson } = loc;
+
+        // Set page title
+        document.title = `${lesson.name} — AI Systems Engineering in Business`;
+
+        // Render breadcrumb
+        document.getElementById('bcPhase').textContent = phase.name;
+        document.getElementById('bcLesson').textContent = lesson.name;
+
+        // Render header
+        document.getElementById('lessonPhaseBadge').textContent = `Phase ${String(phase.id).padStart(2, '0')}`;
+        document.getElementById('lessonTitle').textContent = lesson.name;
+        document.getElementById('lessonTypeTag').textContent = lesson.type;
+        document.getElementById('lessonTypeTag').setAttribute('data-type', lesson.type);
+        document.getElementById('lessonLang').textContent = lesson.lang || '—';
+
+        // Render body
+        document.getElementById('lessonBody').innerHTML = generateLessonContent(phase, lesson);
+
+        // Show/hide code runner
+        const codeRunnerSection = document.getElementById('codeRunnerSection');
+        if (codeRunnerSection) {
+          codeRunnerSection.style.display = (lesson.lang === 'Python') ? 'block' : 'none';
+        }
+
+        // Mark complete button state
+        const isComplete = Progress.isLessonComplete(phase.id, lessonIdx);
+        updateMarkCompleteBtn(isComplete);
+        document.getElementById('markCompleteBtn').addEventListener('click', () => {
+          const currentlyComplete = Progress.isLessonComplete(phase.id, lessonIdx);
+          if (currentlyComplete) {
+            Progress.unmarkLessonComplete(phase.id, lessonIdx);
+            updateMarkCompleteBtn(false);
+            showToast('Marked as incomplete', '📝');
+          } else {
+            Progress.markLessonComplete(phase.id, lessonIdx);
+            updateMarkCompleteBtn(true);
+            showToast('Lesson complete! Great job!', '🎉');
+            launchConfetti();
+          }
+          renderSidebar(phaseIdx, lessonIdx);
+        });
+
+        // Navigation
+        const globalIdx = getGlobalLessonIndex(phaseIdx, lessonIdx);
+        const total = getTotalLessons();
+        const prev = globalIdx > 0 ? getLessonByGlobalIndex(globalIdx - 1) : null;
+        const next = globalIdx < total - 1 ? getLessonByGlobalIndex(globalIdx + 1) : null;
+
+        const navPrev = document.getElementById('navPrev');
+        const navNext = document.getElementById('navNext');
+
+        if (prev) {
+          navPrev.href = `lesson.html?phase=${prev.phaseIdx}&lesson=${prev.lessonIdx}`;
+          navPrev.classList.remove('disabled');
+          document.getElementById('navPrevTitle').textContent = prev.lesson.name;
+        } else {
+          navPrev.classList.add('disabled');
+          document.getElementById('navPrevTitle').textContent = '—';
+        }
+
+        if (next) {
+          navNext.href = `lesson.html?phase=${next.phaseIdx}&lesson=${next.lessonIdx}`;
+          navNext.classList.remove('disabled');
+          document.getElementById('navNextTitle').textContent = next.lesson.name;
+        } else {
+          navNext.classList.add('disabled');
+          document.getElementById('navNextTitle').textContent = '—';
+        }
+
+        // Render sidebar
+        renderSidebar(phaseIdx, lessonIdx);
+
+        // Render quiz
+        const quizQuestions = generateLessonQuiz(phase, lesson);
+        renderLessonQuiz(quizQuestions, 'lessonQuizContent');
+      }
+
+      function updateMarkCompleteBtn(isComplete) {
+        const btn = document.getElementById('markCompleteBtn');
+        const icon = document.getElementById('markCompleteIcon');
+        const text = document.getElementById('markCompleteText');
+        if (isComplete) {
+          btn.classList.add('done');
+          icon.textContent = '✓';
+          text.textContent = 'Completed';
+        } else {
+          btn.classList.remove('done');
+          icon.textContent = '○';
+          text.textContent = 'Mark as Complete';
+        }
+      }
+
+      // Mobile sidebar toggle
+      function initSidebarToggle() {
+        const toggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('lessonSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (!toggle || !sidebar) return;
+        toggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+          if (overlay) overlay.classList.toggle('open');
+        });
+        if (overlay) {
+          overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+          });
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initLessonPage();
+        initSidebarToggle();
+      });
+    })();
+  </script>
+</body>
+</html>

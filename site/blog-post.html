@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — AI Engineering from Scratch</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%233553ff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%233553ff'>AI</text></svg>">
+  <meta name="description" content="Read articles on AI engineering, MLOps, and machine learning fundamentals.">
+  <link rel="canonical" href="https://aiengineeringfromscratch.com/blog-post.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260525a">
+  <style>
+    .post-page { padding: 96px 0 80px; }
+
+    .post-header {
+      padding: 32px 0 36px;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+
+    .post-back {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .post-back:hover { color: var(--ink); }
+
+    .post-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .post-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--rule-soft);
+      color: var(--blueprint);
+    }
+
+    .post-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4.5vw, 3rem);
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 18px;
+      max-width: 840px;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mute);
+    }
+
+    .post-meta .sep { color: var(--rule-soft); }
+
+    .post-layout {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 48px;
+      padding-top: 32px;
+    }
+
+    .post-content {
+      min-width: 0;
+    }
+
+    .post-content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+      text-transform: uppercase;
+      color: var(--blueprint);
+      margin: 40px 0 14px;
+      line-height: 1.1;
+    }
+
+    .post-content h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 28px 0 10px;
+    }
+
+    .post-content p {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--ink);
+      margin-bottom: 1.2em;
+      max-width: 680px;
+    }
+
+    .post-content ul, .post-content ol {
+      margin: 0 0 1.4em 1.2em;
+      max-width: 640px;
+    }
+
+    .post-content li {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--ink);
+      margin-bottom: 0.5em;
+    }
+
+    .post-content strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .post-content em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .post-content code {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      color: var(--blueprint);
+    }
+
+    .post-content pre {
+      font-family: var(--font-mono);
+      background: var(--code-bg);
+      border: 1px solid var(--rule-soft);
+      padding: 16px 18px;
+      overflow-x: auto;
+      margin: 1.2em 0;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .post-content pre code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+    }
+
+    .post-content blockquote {
+      border-left: 2px solid var(--blueprint);
+      padding-left: 18px;
+      margin: 1.4em 0;
+      font-style: italic;
+      color: var(--ink-soft);
+      max-width: 620px;
+    }
+
+    .post-share {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule-soft);
+    }
+
+    .post-share-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+      margin-bottom: 12px;
+    }
+
+    .post-share-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .post-share-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border: 1px solid var(--rule-soft);
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .post-share-btn:hover {
+      border-color: var(--blueprint);
+      color: var(--blueprint);
+      background: var(--blueprint-tint);
+    }
+
+    /* Sidebar TOC */
+    .post-sidebar {
+      position: sticky;
+      top: 96px;
+      align-self: start;
+    }
+
+    .toc-box {
+      border: 1px solid var(--rule-soft);
+      padding: 20px 18px;
+      background: var(--bg);
+      background-image: radial-gradient(circle at 4px 4px, rgba(0,0,0,0.03) 1px, transparent 1.5px);
+      background-size: 16px 16px;
+    }
+
+    .toc-box-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+      margin-bottom: 14px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .toc-list li a {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: var(--ink-soft);
+      text-decoration: none;
+      border-bottom: none;
+      display: block;
+      padding: 3px 0;
+      transition: color 0.15s;
+    }
+
+    .toc-list li a:hover {
+      color: var(--blueprint);
+    }
+
+    .toc-list li a.toc-active {
+      color: var(--blueprint);
+      font-weight: 600;
+    }
+
+    .toc-list li.toc-h2 {
+      padding-left: 0;
+    }
+
+    .toc-list li.toc-h3 {
+      padding-left: 14px;
+    }
+
+    /* Related posts */
+    .related-section {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--rule-soft);
+    }
+
+    .related-title {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+      margin-bottom: 20px;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .related-card {
+      border: 1px solid var(--rule-soft);
+      padding: 18px;
+      background: var(--bg);
+      background-image: radial-gradient(circle at 4px 4px, rgba(0,0,0,0.03) 1px, transparent 1.5px);
+      background-size: 16px 16px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .related-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hard);
+    }
+
+    .related-card-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .related-card-title a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: none;
+    }
+
+    .related-card-title a:hover {
+      color: var(--blueprint);
+    }
+
+    .related-card-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mute);
+    }
+
+    .post-loading,
+    .post-error {
+      text-align: center;
+      padding: 64px 24px;
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      color: var(--ink-mute);
+    }
+
+    @media (max-width: 900px) {
+      .post-layout {
+        grid-template-columns: 1fr;
+      }
+      .post-sidebar {
+        position: static;
+        order: -1;
+        margin-bottom: 24px;
+      }
+      .toc-box {
+        padding: 14px 16px;
+      }
+      .toc-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .toc-list li a {
+        display: inline-block;
+        padding: 4px 10px;
+        border: 1px solid var(--rule-soft);
+        font-size: 0.78rem;
+      }
+      .toc-list li.toc-h3 {
+        padding-left: 0;
+      }
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true"></span> AI / FROM SCRATCH
+      </a>
+      <nav class="header-nav">
+        <a href="index.html#contents">Contents</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="prereqs.html">Roadmap</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="about.html">About</a>
+        <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener" class="header-github">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          <span class="star-count" data-loading="true" aria-label="GitHub stars">…</span>
+        </a>
+      </nav>
+      <button class="search-toggle" type="button" data-cmd-palette
+        aria-label="Search (⌘K)" title="Search (⌘K)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
+        <span class="theme-icon" id="themeIcon">N</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="post-page" id="main">
+    <div class="container">
+      <div id="postContainer">
+        <div class="post-loading">Loading article…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 · open source · free forever</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">GitHub</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="https://github.com/rohitg00/ai-engineering-from-scratch/issues/new/choose" target="_blank" rel="noopener">Report / Suggest</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js?v=20260525a"></script>
+  <script src="progress.js?v=20260525a"></script>
+  <script src="header.js?v=20260525a" defer></script>
+  <script src="cmdpalette.js?v=20260525a" defer></script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var stored = localStorage.getItem('theme');
+      if (stored) {
+        root.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.setAttribute('data-theme', 'light');
+      }
+
+      function updateIcon() {
+        var icon = document.getElementById('themeIcon');
+        if (!icon) return;
+        icon.textContent = root.getAttribute('data-theme') === 'light' ? 'N' : 'D';
+      }
+
+      updateIcon();
+
+      document.addEventListener('DOMContentLoaded', function () {
+        updateIcon();
+        var btn = document.getElementById('themeToggle');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateIcon();
+          });
+        }
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var posts = [];
+      var postFiles = [
+        'blog/getting-started-with-ai-in-business.json',
+        'blog/why-linear-regression-still-matters.json',
+        'blog/deploying-your-first-ml-model.json',
+        'blog/understanding-attention.json',
+        'blog/mlops-for-small-teams.json'
+      ];
+      var currentSlug = '';
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function formatDate(dateStr) {
+        var d = new Date(dateStr);
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      function getQueryParam(name) {
+        var params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      function extractHeadings(content) {
+        var headings = [];
+        var temp = document.createElement('div');
+        temp.innerHTML = content;
+        var h2s = temp.querySelectorAll('h2, h3');
+        h2s.forEach(function (h) {
+          var id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          headings.push({ level: h.tagName, text: h.textContent, id: id });
+        });
+        return headings;
+      }
+
+      function assignIdsToContent(content) {
+        var temp = document.createElement('div');
+        temp.innerHTML = content;
+        var seen = {};
+        temp.querySelectorAll('h2, h3').forEach(function (h) {
+          var id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          if (seen[id]) {
+            seen[id]++;
+            id = id + '-' + seen[id];
+          } else {
+            seen[id] = 1;
+          }
+          h.id = id;
+        });
+        return temp.innerHTML;
+      }
+
+      function renderPost(post) {
+        var container = document.getElementById('postContainer');
+        var tagsHtml = '';
+        if (post.tags && post.tags.length) {
+          tagsHtml = '<div class="post-tags">' +
+            post.tags.map(function (t) {
+              return '<span class="post-tag">' + escapeHtml(t) + '</span>';
+            }).join('') +
+          '</div>';
+        }
+
+        var headings = extractHeadings(post.content);
+        var tocHtml = '';
+        if (headings.length) {
+          tocHtml = '<div class="toc-box"><div class="toc-box-title">Contents</div><ul class="toc-list">' +
+            headings.map(function (h) {
+              var cls = h.level === 'H2' ? 'toc-h2' : 'toc-h3';
+              return '<li class="' + cls + '"><a href="#' + h.id + '">' + escapeHtml(h.text) + '</a></li>';
+            }).join('') +
+          '</ul></div>';
+        }
+
+        // Share URLs
+        var shareUrl = encodeURIComponent(window.location.href);
+        var shareTitle = encodeURIComponent(post.title);
+
+        var contentWithIds = assignIdsToContent(post.content);
+
+        container.innerHTML =
+          '<div class="post-header">' +
+            '<a href="blog.html" class="post-back">← All articles</a>' +
+            tagsHtml +
+            '<h1 class="post-title">' + escapeHtml(post.title) + '</h1>' +
+            '<div class="post-meta">' +
+              '<span>' + escapeHtml(post.author) + '</span>' +
+              '<span class="sep">/</span>' +
+              '<span>' + formatDate(post.date) + '</span>' +
+              '<span class="sep">/</span>' +
+              '<span>' + (post.readingTime || '~5') + ' min read</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="post-layout">' +
+            '<div class="post-content">' + contentWithIds +
+              '<div class="post-share">' +
+                '<div class="post-share-label">Share this article</div>' +
+                '<div class="post-share-buttons">' +
+                  '<a class="post-share-btn" href="https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + shareTitle + '" target="_blank" rel="noopener">X / Twitter</a>' +
+                  '<a class="post-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrl + '" target="_blank" rel="noopener">LinkedIn</a>' +
+                  '<a class="post-share-btn" href="https://news.ycombinator.com/submitlink?u=' + shareUrl + '&t=' + shareTitle + '" target="_blank" rel="noopener">Hacker News</a>' +
+                  '<button class="post-share-btn" id="copyLinkBtn" type="button">Copy Link</button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="related-section" id="relatedSection"></div>' +
+            '</div>' +
+            '<aside class="post-sidebar">' + tocHtml + '</aside>' +
+          '</div>';
+
+        // Copy link
+        var copyBtn = document.getElementById('copyLinkBtn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(window.location.href).then(function () {
+              copyBtn.textContent = 'Copied!';
+              setTimeout(function () { copyBtn.textContent = 'Copy Link'; }, 2000);
+            });
+          });
+        }
+
+        // Related posts
+        var related = posts.filter(function (p) {
+          return p.slug !== post.slug;
+        }).slice(0, 3);
+
+        var relatedEl = document.getElementById('relatedSection');
+        if (relatedEl && related.length) {
+          var relHtml = '<div class="related-title">Related Reading</div><div class="related-grid">';
+          related.forEach(function (p) {
+            relHtml += '<div class="related-card">' +
+              '<div class="related-card-title"><a href="blog-post.html?slug=' + escapeHtml(p.slug) + '">' + escapeHtml(p.title) + '</a></div>' +
+              '<div class="related-card-meta">' + formatDate(p.date) + ' · ' + (p.readingTime || '~5') + ' min</div>' +
+            '</div>';
+          });
+          relHtml += '</div>';
+          relatedEl.innerHTML = relHtml;
+        }
+
+        // TOC scroll spy
+        var tocLinks = document.querySelectorAll('.toc-list a');
+        var headings = document.querySelectorAll('.post-content h2[id], .post-content h3[id]');
+        if (tocLinks.length && headings.length) {
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                tocLinks.forEach(function (a) { a.classList.remove('toc-active'); });
+                var link = document.querySelector('.toc-list a[href="#' + entry.target.id + '"]');
+                if (link) link.classList.add('toc-active');
+              }
+            });
+          }, { rootMargin: '-80px 0px -60% 0px' });
+          headings.forEach(function (h) { observer.observe(h); });
+        }
+      }
+
+      function showError(msg) {
+        document.getElementById('postContainer').innerHTML = '<div class="post-error">' + escapeHtml(msg) + '</div>';
+      }
+
+      // Load all posts
+      var loaded = 0;
+      currentSlug = getQueryParam('slug');
+
+      if (!currentSlug) {
+        showError('No article specified. Go back to the blog.');
+        return;
+      }
+
+      postFiles.forEach(function (file) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', file, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            loaded++;
+            if (xhr.status === 200) {
+              try {
+                var post = JSON.parse(xhr.responseText);
+                posts.push(post);
+              } catch (e) {}
+            }
+            if (loaded === postFiles.length) {
+              var found = posts.find(function (p) { return p.slug === currentSlug; });
+              if (found) {
+                document.title = found.title + ' — AI Engineering from Scratch';
+                renderPost(found);
+              } else {
+                showError('Article not found. It may have been moved or removed.');
+              }
+            }
+          }
+        };
+        xhr.send();
+      });
+    })();
+  </script>
+  <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
+</body>
+</html>
