@@ -1,0 +1,7 @@
+{
+  "framework": null,
+  "outputDirectory": "site",
+  "devCommand": "npx serve site",
+  "installCommand": "",
+  "buildCommand": ""
+}
