@@ -1164,6 +1164,33 @@ sys.stderr = sys.__stderr__
 
     // Pyodide Playground (demos.html)
     initPyodidePlayground();
+
+    // Keyboard shortcuts help
+    initKeyboardHelp();
   });
+
+  function initKeyboardHelp() {
+    const helpModal = document.getElementById('keyboardHelp');
+    if (!helpModal) return;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        helpModal.classList.add('show');
+      }
+      if (e.key === 'Escape' && helpModal.classList.contains('show')) {
+        helpModal.classList.remove('show');
+      }
+    });
+
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) helpModal.classList.remove('show');
+    });
+
+    const closeBtn = helpModal.querySelector('.keyboard-help-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => helpModal.classList.remove('show'));
+    }
+  }
 
 })();

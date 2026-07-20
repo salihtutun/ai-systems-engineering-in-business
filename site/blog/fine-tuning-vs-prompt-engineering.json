@@ -1,0 +1,85 @@
+{
+  "slug": "fine-tuning-vs-prompt-engineering",
+  "title": "Fine-Tuning vs. Prompt Engineering: When to Use What",
+  "category": "Strategy",
+  "tags": ["fine-tuning", "prompt-engineering", "llm", "strategy", "business"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-07-15",
+  "readingTime": 8,
+  "excerpt": "The eternal question: should you fine-tune a model or just write better prompts? The answer depends on your use case, budget, and timeline.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Dilemma"
+    },
+    {
+      "type": "paragraph",
+      "text": "You're building an AI feature. The LLM doesn't quite get your domain — maybe it's a legal assistant that needs to cite specific case law, or a customer support bot that must follow your company's exact troubleshooting protocol."
+    },
+    {
+      "type": "paragraph",
+      "text": "You have two options: (1) Spend weeks collecting data and fine-tuning a model, or (2) Spend a day writing detailed prompts with few-shot examples."
+    },
+    {
+      "type": "paragraph",
+      "text": "Most teams default to fine-tuning because it feels like 'real engineering.' But often, prompt engineering is faster, cheaper, and more maintainable."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "When to Prompt Engineer"
+    },
+    {
+      "type": "list",
+      "items": [
+        "The task is well-defined and can be described in instructions",
+        "You need to ship in days, not weeks",
+        "Your use case changes frequently (prompts are easier to update than models)",
+        "You don't have thousands of labeled examples",
+        "You want to compare multiple models quickly"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "When to Fine-Tune"
+    },
+    {
+      "type": "list",
+      "items": [
+        "The task requires deep domain knowledge that can't fit in a prompt (e.g., medical diagnosis)",
+        "You have 1,000+ high-quality labeled examples",
+        "Latency is critical — fine-tuned models can be smaller and faster",
+        "You need consistent output format that the base model struggles with",
+        "You want to reduce API costs by using a smaller model"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Hybrid Approach"
+    },
+    {
+      "type": "paragraph",
+      "text": "The best teams use both. They start with prompt engineering to validate the use case, then gradually introduce fine-tuning for the parts that matter most."
+    },
+    {
+      "type": "paragraph",
+      "text": "A practical workflow: (1) Build with prompts, (2) Collect real user interactions, (3) Use those interactions to create a fine-tuning dataset, (4) Fine-tune when the economics justify it."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Numbers"
+    },
+    {
+      "type": "paragraph",
+      "text": "Fine-tuning GPT-4 costs ~$30-80 per million tokens of training data. Running inference on a fine-tuned GPT-3.5 costs the same as base GPT-3.5. But a well-optimized prompt on GPT-4 might solve the problem with zero additional training cost."
+    },
+    {
+      "type": "paragraph",
+      "text": "For most business applications, start with prompts. Move to fine-tuning only when you have evidence that prompts can't get you there."
+    }
+  ]
+}

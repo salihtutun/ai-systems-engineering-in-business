@@ -1,0 +1,105 @@
+{
+  "slug": "evaluating-llm-applications",
+  "title": "How to Evaluate LLM Applications (Without Going Crazy)",
+  "category": "Engineering",
+  "tags": ["evaluation", "llm", "metrics", "testing", "production"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-07-05",
+  "readingTime": 10,
+  "excerpt": "You've built an LLM feature. Now how do you know if it's actually good? Here's a practical framework for evaluating AI applications.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Evaluation Problem"
+    },
+    {
+      "type": "paragraph",
+      "text": "Traditional software has clear pass/fail criteria. Does the API return 200? Does the calculation match the spec? LLM applications are fuzzier. A response can be partially correct, creatively wrong, or differently phrased but equally valid."
+    },
+    {
+      "type": "paragraph",
+      "text": "You need a multi-layered evaluation strategy. Here's what works in practice."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Level 1: Unit Tests"
+    },
+    {
+      "type": "paragraph",
+      "text": "Start with deterministic checks:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Does the output follow the requested format (JSON, markdown, etc.)?",
+        "Are required fields present?",
+        "Does the response stay within length constraints?",
+        "Are there no obvious safety issues (PII leakage, harmful content)?"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "These are fast, cheap, and catch 80% of obvious failures."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Level 2: Reference-Based Metrics"
+    },
+    {
+      "type": "paragraph",
+      "text": "For tasks with ground truth (summarization, translation, Q&A with known answers), use metrics like ROUGE, BLEU, or exact match. But be careful — these measure surface similarity, not semantic correctness. A paraphrased correct answer scores poorly on exact match."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Level 3: LLM-as-Judge"
+    },
+    {
+      "type": "paragraph",
+      "text": "Use a stronger model (GPT-4, Claude) to evaluate outputs. Give it clear rubrics:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "text": "Evaluate the following response on a scale of 1-5:\n\n1: Incorrect or harmful\n2: Partially correct but missing key information\n3: Correct but could be more detailed\n4: Correct and comprehensive\n5: Exceptional, goes above and beyond\n\nQuestion: {question}\nResponse: {response}\n\nScore: [1-5]\nReasoning:"
+    },
+    {
+      "type": "paragraph",
+      "text": "This is surprisingly effective if your rubric is specific. The key is consistency — run multiple evaluations and look at the distribution, not just a single score."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Level 4: Human Evaluation"
+    },
+    {
+      "type": "paragraph",
+      "text": "For high-stakes applications, nothing beats human judgment. But make it structured: use Likert scales, side-by-side comparisons, and multiple reviewers. Track inter-rater agreement (Cohen's kappa) to ensure your rubric is clear."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Level 5: A/B Testing"
+    },
+    {
+      "type": "paragraph",
+      "text": "The ultimate test: does the LLM feature actually improve your business metric? Run an A/B test. Measure task completion rate, user satisfaction, time-to-resolution, or whatever matters to your product."
+    },
+    {
+      "type": "paragraph",
+      "text": "A model that scores 95% on your internal evaluation but confuses users in production is worse than a model that scores 80% but delights them."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Golden Rule"
+    },
+    {
+      "type": "paragraph",
+      "text": "Don't optimize for the metric. Optimize for the user. Metrics are proxies for quality, but they're imperfect. Use them to catch regressions and compare variants, not as the sole definition of success."
+    }
+  ]
+}

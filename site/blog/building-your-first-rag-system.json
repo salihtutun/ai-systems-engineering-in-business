@@ -1,0 +1,98 @@
+{
+  "slug": "building-your-first-rag-system",
+  "title": "Building Your First RAG System: A Practical Guide",
+  "category": "Engineering",
+  "tags": ["rag", "retrieval", "embeddings", "vector-db", "tutorial"],
+  "author": "AI Systems Engineering Team",
+  "date": "2026-07-10",
+  "readingTime": 12,
+  "excerpt": "Retrieval-Augmented Generation (RAG) is the most practical way to add domain knowledge to LLMs. Here's how to build one from scratch.",
+  "content": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "What is RAG?"
+    },
+    {
+      "type": "paragraph",
+      "text": "RAG stands for Retrieval-Augmented Generation. It's a pattern where you: (1) retrieve relevant documents from a knowledge base, (2) add them to the prompt, and (3) let the LLM generate an answer based on that context."
+    },
+    {
+      "type": "paragraph",
+      "text": "Why not just fine-tune? Because knowledge changes. Your product docs get updated, policies change, new research gets published. RAG lets the LLM access fresh information without retraining."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Architecture"
+    },
+    {
+      "type": "paragraph",
+      "text": "A basic RAG system has four components:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Document processor — loads, chunks, and cleans your documents",
+        "Embedding model — converts chunks into dense vectors",
+        "Vector database — stores vectors and performs similarity search",
+        "Generation layer — the LLM that answers using retrieved context"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Step 1: Chunking"
+    },
+    {
+      "type": "paragraph",
+      "text": "Chunking is critical. Too small: loses context. Too large: dilutes relevance. For most documents, 256-512 tokens with 10-20% overlap works well. For code, chunk by function. For conversations, chunk by turn."
+    },
+    {
+      "type": "code",
+      "language": "python",
+      "text": "def chunk_text(text, chunk_size=512, overlap=50):\n    chunks = []\n    start = 0\n    while start < len(text):\n        end = start + chunk_size\n        chunks.append(text[start:end])\n        start = end - overlap\n    return chunks"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Step 2: Embeddings"
+    },
+    {
+      "type": "paragraph",
+      "text": "Use a sentence embedding model like sentence-transformers/all-MiniLM-L6-v2 (fast, cheap) or OpenAI's text-embedding-3-large (best quality). The embedding converts each chunk into a 384-3072 dimensional vector."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Step 3: Vector Database"
+    },
+    {
+      "type": "paragraph",
+      "text": "For prototypes, use ChromaDB or FAISS. For production, consider Pinecone, Weaviate, or pgvector. The key operation is approximate nearest neighbor (ANN) search — finding the most similar vectors efficiently."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Step 4: The Prompt"
+    },
+    {
+      "type": "paragraph",
+      "text": "The magic happens in how you format the retrieved context. A good prompt template:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "text": "Answer the question based on the provided context. If the answer is not in the context, say 'I don't have enough information.'\n\nContext:\n{retrieved_docs}\n\nQuestion: {user_question}\n\nAnswer:"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Advanced RAG"
+    },
+    {
+      "type": "paragraph",
+      "text": "Once basic RAG works, you can improve it with: re-ranking (using a cross-encoder to score retrieved chunks), query expansion (generating multiple search queries from the user's question), and hybrid search (combining vector similarity with keyword matching)."
+    }
+  ]
+}
